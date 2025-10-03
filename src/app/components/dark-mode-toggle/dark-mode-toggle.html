@@ -1,0 +1,19 @@
+<!-- components/dark-mode-toggle/dark-mode-toggle.component.html -->
+<button 
+  class="dark-mode-toggle"
+  (click)="toggleDarkMode()"
+  [attr.aria-label]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+  [title]="isDarkMode() ? 'Switch to light mode' : 'Switch to dark mode'"
+>
+  <div class="toggle-container" [class.dark]="isDarkMode()">
+    <span class="sun-icon">☀️</span>
+    <span class="moon-icon">🌙</span>
+    <div class="toggle-thumb"></div>
+  </div>
+  <span class="toggle-text">
+    {{ isDarkMode() ? 
+        (languageService.currentLanguage() === 'ar' ? 'الوضع الفاتح' : 'Light Mode') : 
+        (languageService.currentLanguage() === 'ar' ? 'الوضع الداكن' : 'Dark Mode') 
+    }}
+  </span>
+</button>

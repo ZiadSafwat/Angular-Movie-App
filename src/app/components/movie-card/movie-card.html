@@ -1,0 +1,59 @@
+<!-- components/movie-card/movie-card.component.html -->
+<div class="movie-card" [class.dark]="darkModeService.isDarkMode()">
+    <div class="card-image">
+      <img 
+        [src]="getImageUrl()" 
+        [alt]="movie().title"
+        (error)="onImageError($event)"
+        class="movie-poster"
+      />
+      
+      <!-- Wishlist Button -->
+      <button 
+        class="wishlist-btn"
+        (click)="toggleWishlist()"
+        [class.in-wishlist]="isInWishlist()"
+        [attr.aria-label]="isInWishlist() ? translationService.t.removeFromFavorites : translationService.t.addToFavorites"
+      >
+        <span class="heart-icon">{{ isInWishlist() ? '❤️' : '🤍' }}</span>
+      </button>
+  
+      <!-- Remove Button (for wishlist page) -->
+      <button 
+        *ngIf="showRemove()"
+        class="remove-btn"
+        (click)="removeFromWishlist()"
+        [attr.aria-label]="translationService.t.removeFromFavorites"
+      >
+        🗑️
+      </button>
+  
+      <!-- Rating Badge -->
+      <div class="rating-badge">
+        ⭐ {{ movie().vote_average | number:'1.1-1' }}
+      </div>
+    </div>
+  
+    <div class="card-content">
+      <h3 class="movie-title" [title]="movie().title">
+        {{ movie().title }}
+      </h3>
+      
+      <p class="movie-date">
+        📅 {{ movie().release_date | date:'mediumDate' }}
+      </p>
+      
+      <p class="movie-overview">
+        {{ truncateOverview() }}
+      </p>
+  
+      <div class="card-actions">
+        <a 
+          [routerLink]="['/movie', movie().id]" 
+          class="details-btn"
+        >
+          {{ translationService.t.viewDetails }}
+        </a>
+      </div>
+    </div>
+  </div>

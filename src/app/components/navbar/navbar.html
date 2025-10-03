@@ -1,0 +1,189 @@
+<!-- components/navbar/navbar.component.html -->
+<nav class="navbar" [class.dark]="darkModeService.isDarkMode()" [class.rtl]="languageService.isRTL()">
+    <div class="nav-container">
+      <!-- Logo -->
+      <a routerLink="/" class="nav-logo">
+        <span class="logo-icon">🎬</span>
+        <span class="logo-text">MovieApp</span>
+      </a>
+  
+      <!-- Navigation Links -->
+      <div class="nav-links">
+        <a 
+          routerLink="/" 
+          class="nav-link"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact: true}"
+        >
+          <span class="link-icon">🏠</span>
+          {{ getTranslation('Movies') }}
+        </a>
+        
+        <a 
+          routerLink="/wishlist" 
+          class="nav-link wishlist-link"
+          routerLinkActive="active"
+        >
+          <span class="link-icon">❤️</span>
+          {{ getTranslation('Wishlist') }}
+          <span 
+            *ngIf="wishlistService.wishlistCount() > 0" 
+            class="wishlist-counter"
+          >
+            {{ wishlistService.wishlistCount() }}
+          </span>
+        </a>
+        
+        <a 
+          routerLink="/search" 
+          class="nav-link"
+          routerLinkActive="active"
+        >
+          <span class="link-icon">🔍</span>
+          {{ getTranslation('Search') }}
+        </a>
+      </div>
+  
+      <!-- Right Controls -->
+      <div class="nav-controls">
+        <!-- Language Selector -->
+        <div class="language-selector">
+          <select 
+            [value]="languageService.currentLanguage()"
+            (change)="onLanguageChange($event)"
+            class="language-dropdown"
+          >
+            <option 
+              *ngFor="let lang of languageService.languages" 
+              [value]="lang.code"
+            >
+              {{ lang.name }}
+            </option>
+          </select>
+        </div>
+  
+        <!-- Dark Mode Toggle -->
+        <app-dark-mode-toggle></app-dark-mode-toggle>
+  
+        <!-- Auth Section -->
+        <div class="auth-section">
+          <a 
+            *ngIf="!isLoggedIn()"
+            routerLink="/login" 
+            class="auth-link login-link"
+          >
+            {{ getTranslation('Login') }}
+          </a>
+          
+          <a 
+            *ngIf="!isLoggedIn()"
+            routerLink="/register" 
+            class="auth-link register-link"
+          >
+            {{ getTranslation('Register') }}
+          </a>
+          
+          <div *ngIf="isLoggedIn()" class="user-menu">
+            <button class="user-btn" (click)="toggleUserMenu()">
+              <span class="user-avatar">👤</span>
+              <span class="username">{{ getCurrentUser() }}</span>
+              <span class="dropdown-arrow">▼</span>
+            </button>
+            
+            <div *ngIf="showUserMenu" class="user-dropdown">
+              <a routerLink="/account" class="dropdown-item">
+                {{ getTranslation('Account') }}
+              </a>
+              <button (click)="logout()" class="dropdown-item logout-btn">
+                {{ getTranslation('Logout') }}
+              </button>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Mobile Menu Toggle -->
+        <button 
+          class="mobile-menu-toggle"
+          (click)="toggleMobileMenu()"
+          [attr.aria-label]="isMobileMenuOpen() ? 'Close menu' : 'Open menu'"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  
+    <!-- Mobile Menu -->
+    <div *ngIf="isMobileMenuOpen()" class="mobile-menu">
+      <a 
+        routerLink="/" 
+        class="mobile-nav-link"
+        (click)="closeMobileMenu()"
+      >
+        <span class="link-icon">🏠</span>
+        {{ getTranslation('Movies') }}
+      </a>
+      
+      <a 
+        routerLink="/wishlist" 
+        class="mobile-nav-link"
+        (click)="closeMobileMenu()"
+      >
+        <span class="link-icon">❤️</span>
+        {{ getTranslation('Wishlist') }}
+        <span 
+          *ngIf="wishlistService.wishlistCount() > 0" 
+          class="mobile-wishlist-counter"
+        >
+          {{ wishlistService.wishlistCount() }}
+        </span>
+      </a>
+      
+      <a 
+        routerLink="/search" 
+        class="mobile-nav-link"
+        (click)="closeMobileMenu()"
+      >
+        <span class="link-icon">🔍</span>
+        {{ getTranslation('Search') }}
+      </a>
+      
+      <div class="mobile-auth-section">
+        <a 
+          *ngIf="!isLoggedIn()"
+          routerLink="/login" 
+          class="mobile-auth-link"
+          (click)="closeMobileMenu()"
+        >
+          {{ getTranslation('Login') }}
+        </a>
+        
+        <a 
+          *ngIf="!isLoggedIn()"
+          routerLink="/register" 
+          class="mobile-auth-link"
+          (click)="closeMobileMenu()"
+        >
+          {{ getTranslation('Register') }}
+        </a>
+        
+        <a 
+          *ngIf="isLoggedIn()"
+          routerLink="/account" 
+          class="mobile-auth-link"
+          (click)="closeMobileMenu()"
+        >
+          {{ getTranslation('Account') }}
+        </a>
+        
+        <button 
+          *ngIf="isLoggedIn()"
+          (click)="logout(); closeMobileMenu()" 
+          class="mobile-logout-btn"
+        >
+          {{ getTranslation('Logout') }}
+        </button>
+      </div>
+    </div>
+  </nav>
