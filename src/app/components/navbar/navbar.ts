@@ -1,7 +1,7 @@
 // components/navbar/navbar.component.ts
 import { Component, inject, signal, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { WishlistService } from '../../services/wishlist';
 import { DarkModeService } from '../../services/dark-mode';
 import { LanguageService } from '../../services/language';
@@ -26,6 +26,9 @@ export class NavbarComponent {
 
   isMobileMenuOpen = signal(false);
   showUserMenu = signal(false);
+  constructor(
+    private router: Router  
+  ) {}
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
@@ -61,6 +64,10 @@ export class NavbarComponent {
     // Update translations after language change
     this.translationService.updateTranslations();
   }
+onSearch(query: string) {
+  if (!query.trim()) return;
+  this.router.navigate(['/search'], { queryParams: { q: query } });
+}
 
   logout(): void {
     this.authService.logout();

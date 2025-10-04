@@ -1,189 +1,67 @@
-<!-- components/navbar/navbar.component.html -->
-<nav class="navbar" [class.dark]="darkModeService.isDarkMode()" [class.rtl]="languageService.isRTL()">
-    <div class="nav-container">
-      <!-- Logo -->
-      <a routerLink="/" class="nav-logo">
-        <span class="logo-icon">🎬</span>
-        <span class="logo-text">MovieApp</span>
-      </a>
-  
-      <!-- Navigation Links -->
-      <div class="nav-links">
-        <a 
-          routerLink="/" 
-          class="nav-link"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{exact: true}"
-        >
-          <span class="link-icon">🏠</span>
-          {{ getTranslation('Movies') }}
-        </a>
-        
-        <a 
-          routerLink="/wishlist" 
-          class="nav-link wishlist-link"
-          routerLinkActive="active"
-        >
-          <span class="link-icon">❤️</span>
-          {{ getTranslation('Wishlist') }}
-          <span 
-            *ngIf="wishlistService.wishlistCount() > 0" 
-            class="wishlist-counter"
-          >
-            {{ wishlistService.wishlistCount() }}
-          </span>
-        </a>
-        
-        <a 
-          routerLink="/search" 
-          class="nav-link"
-          routerLinkActive="active"
-        >
-          <span class="link-icon">🔍</span>
-          {{ getTranslation('Search') }}
-        </a>
-      </div>
-  
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <div class="container-fluid">
+    <!-- Brand -->
+    <a class="navbar-brand fw-bold text-warning" >MovieApp</a>
+
+    <!-- Toggler for mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <!-- Center Links -->
+      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Now Playing</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/popular" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Popular</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/TopRated" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Top Rated</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/upcoming" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Upcoming</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/genres" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Genres</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/wishlist" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Favourites</a>
+        </li>
+      </ul>
+
       <!-- Right Controls -->
-      <div class="nav-controls">
-        <!-- Language Selector -->
-        <div class="language-selector">
-          <select 
-            [value]="languageService.currentLanguage()"
-            (change)="onLanguageChange($event)"
-            class="language-dropdown"
-          >
-            <option 
-              *ngFor="let lang of languageService.languages" 
-              [value]="lang.code"
-            >
-              {{ lang.name }}
-            </option>
-          </select>
+      <div class="d-flex align-items-center">
+        <!-- Search -->
+        <form class="d-flex me-3" (ngSubmit)="onSearch(searchInput.value)">
+          <input #searchInput class="form-control form-control-sm me-2" type="search" placeholder="Search..." />
+          <button class="btn btn-outline-warning btn-sm" type="submit">Search</button>
+        </form>
+
+        <!-- Language Switch -->
+        <select class="form-select form-select-sm me-3" 
+                [value]="languageService.currentLanguage()" 
+                (change)="onLanguageChange($event)">
+          <option *ngFor="let lang of languageService.languages" [value]="lang.code">
+            {{ lang.name }}
+          </option>
+        </select>
+
+        <!-- Auth -->
+        <a *ngIf="!isLoggedIn()" routerLink="/login" class="btn btn-outline-light btn-sm me-2">Login</a>
+        <a *ngIf="!isLoggedIn()" routerLink="/register" class="btn btn-warning btn-sm">Register</a>
+
+        <div *ngIf="isLoggedIn()" class="dropdown">
+          <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            👤 {{ getCurrentUser() }}
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><a class="dropdown-item" routerLink="/account">Account</a></li>
+            <li><button class="dropdown-item text-danger" (click)="logout()">Logout</button></li>
+          </ul>
         </div>
-  
-        <!-- Dark Mode Toggle -->
-        <app-dark-mode-toggle></app-dark-mode-toggle>
-  
-        <!-- Auth Section -->
-        <div class="auth-section">
-          <a 
-            *ngIf="!isLoggedIn()"
-            routerLink="/login" 
-            class="auth-link login-link"
-          >
-            {{ getTranslation('Login') }}
-          </a>
-          
-          <a 
-            *ngIf="!isLoggedIn()"
-            routerLink="/register" 
-            class="auth-link register-link"
-          >
-            {{ getTranslation('Register') }}
-          </a>
-          
-          <div *ngIf="isLoggedIn()" class="user-menu">
-            <button class="user-btn" (click)="toggleUserMenu()">
-              <span class="user-avatar">👤</span>
-              <span class="username">{{ getCurrentUser() }}</span>
-              <span class="dropdown-arrow">▼</span>
-            </button>
-            
-            <div *ngIf="showUserMenu" class="user-dropdown">
-              <a routerLink="/account" class="dropdown-item">
-                {{ getTranslation('Account') }}
-              </a>
-              <button (click)="logout()" class="dropdown-item logout-btn">
-                {{ getTranslation('Logout') }}
-              </button>
-            </div>
-          </div>
-        </div>
-  
-        <!-- Mobile Menu Toggle -->
-        <button 
-          class="mobile-menu-toggle"
-          (click)="toggleMobileMenu()"
-          [attr.aria-label]="isMobileMenuOpen() ? 'Close menu' : 'Open menu'"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
       </div>
     </div>
-  
-    <!-- Mobile Menu -->
-    <div *ngIf="isMobileMenuOpen()" class="mobile-menu">
-      <a 
-        routerLink="/" 
-        class="mobile-nav-link"
-        (click)="closeMobileMenu()"
-      >
-        <span class="link-icon">🏠</span>
-        {{ getTranslation('Movies') }}
-      </a>
-      
-      <a 
-        routerLink="/wishlist" 
-        class="mobile-nav-link"
-        (click)="closeMobileMenu()"
-      >
-        <span class="link-icon">❤️</span>
-        {{ getTranslation('Wishlist') }}
-        <span 
-          *ngIf="wishlistService.wishlistCount() > 0" 
-          class="mobile-wishlist-counter"
-        >
-          {{ wishlistService.wishlistCount() }}
-        </span>
-      </a>
-      
-      <a 
-        routerLink="/search" 
-        class="mobile-nav-link"
-        (click)="closeMobileMenu()"
-      >
-        <span class="link-icon">🔍</span>
-        {{ getTranslation('Search') }}
-      </a>
-      
-      <div class="mobile-auth-section">
-        <a 
-          *ngIf="!isLoggedIn()"
-          routerLink="/login" 
-          class="mobile-auth-link"
-          (click)="closeMobileMenu()"
-        >
-          {{ getTranslation('Login') }}
-        </a>
-        
-        <a 
-          *ngIf="!isLoggedIn()"
-          routerLink="/register" 
-          class="mobile-auth-link"
-          (click)="closeMobileMenu()"
-        >
-          {{ getTranslation('Register') }}
-        </a>
-        
-        <a 
-          *ngIf="isLoggedIn()"
-          routerLink="/account" 
-          class="mobile-auth-link"
-          (click)="closeMobileMenu()"
-        >
-          {{ getTranslation('Account') }}
-        </a>
-        
-        <button 
-          *ngIf="isLoggedIn()"
-          (click)="logout(); closeMobileMenu()" 
-          class="mobile-logout-btn"
-        >
-          {{ getTranslation('Logout') }}
-        </button>
-      </div>
-    </div>
-  </nav>
+  </div>
+</nav>

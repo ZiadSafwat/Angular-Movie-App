@@ -1,18 +1,16 @@
-import { Component } from '@angular/core';
-import { MovieList } from '../../services/movie-list';
-import { Router, RouterLink } from '@angular/router';
-import { Observable } from 'rxjs';
-import { Movie } from '../../models/movie.model';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { MovieList } from '../../services/movie-list';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-popular',
   imports: [CommonModule, RouterLink],
-  templateUrl: './home.html',
-  styleUrl: './home.css'
+  templateUrl: './popular.html',
+  styleUrl: './popular.css'
 })
-export class Home {
-  movies: any[] = [];
+export class Popular {
+ popularMovies: any[] = [];
   currentPage = 1;
   totalPages = 0;
   constructor(  
@@ -27,8 +25,8 @@ export class Home {
   }
 
   loadMovies(page: number) {
-    this.MovieService.getMovies('now_playing',page).subscribe((data) => {
-      this.movies = data.results;
+    this.MovieService.getMovies('popular',page).subscribe((data) => {
+      this.popularMovies = data.results;
       this.totalPages = data.total_pages;
       this.currentPage = data.page;
           window.scrollTo({ top: 0, behavior: 'smooth' });
