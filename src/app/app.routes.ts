@@ -4,15 +4,18 @@ import { WishlistComponent } from './pages/wishlist/wishlist';
 import { Popular } from './components/popular/popular';
 import { TopRated } from './components/top-rated/top-rated';
 import { UpComing } from './components/up-coming/up-coming';
+import { Genres } from './components/genres/genres';
+import { MoviesByGenres } from './components/movies-by-genres/movies-by-genres';
 
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'home', component: Home },
+  { path: '', component: Home },
   { path: 'wishlist', component: WishlistComponent, title: 'My Wishlist - MovieApp' },
   {path:'popular',component:Popular,title:'Popular Movies'},
     {path:'TopRated',component:TopRated,title:'TopRated Movies'},
   {path:'upcoming',component:UpComing,title:'UpComing Movies'},
+  {path:'genres',component:Genres,title:'Genres'},
+   { path: 'genre/:id', component: MoviesByGenres, title: 'Movies by Genre' },
 
   // { path: 'movie:id', component: MovieDetailsComponent, title: 'Movie Details - MovieApp' },
   // { path: 'search', component: SearchComponent, title: 'Search - MovieApp' },

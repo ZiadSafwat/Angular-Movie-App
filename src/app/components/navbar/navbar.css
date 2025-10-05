@@ -12,3 +12,7 @@
   font-size: 1.3rem;
   letter-spacing: 1px;
 }
+.navbar .nav-link.active {
+  border-bottom: 2px solid #f1c40f;
+}
+

@@ -1,0 +1,17 @@
+body {
+  background-color: #000; /* Dark background */
+}
+
+.genre-card {
+  background-color: #1a1a1a72;  /* Dark gray card */
+  border: none;
+  border-radius: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  color: #fff;
+}
+
+.genre-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.6); /* Yellow glow */
+}

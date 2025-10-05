@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { MovieList } from '../../services/movie-list';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-up-coming',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './up-coming.html',
   styleUrl: './up-coming.css',
 })

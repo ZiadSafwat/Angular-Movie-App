@@ -5,7 +5,7 @@ import { MovieList } from '../../services/movie-list';
 
 @Component({
   selector: 'app-popular',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './popular.html',
   styleUrl: './popular.css'
 })
@@ -15,7 +15,7 @@ export class Popular {
   totalPages = 0;
   constructor(  
     public MovieService: MovieList,
-    private router: Router,  
+   
    )
    {
    

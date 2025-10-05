@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { MovieList } from '../../services/movie-list';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-top-rated',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './top-rated.html',
   styleUrl: './top-rated.css',
 })
