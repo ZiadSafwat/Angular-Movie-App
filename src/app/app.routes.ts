@@ -6,11 +6,15 @@ import { TopRated } from './components/top-rated/top-rated';
 import { UpComing } from './components/up-coming/up-coming';
 import { Genres } from './components/genres/genres';
 import { MoviesByGenres } from './components/movies-by-genres/movies-by-genres';
-import { AppComponent } from './components/login/login';
+import { LoginComponent } from './components/login/login';
+import { RegisterComponent } from './components/register/register';
 
 
 export const routes: Routes = [
-  { path: '', component: Home },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent, title: 'Login - MovieApp' },
+  { path: 'register', component: RegisterComponent, title: 'Register - MovieApp' },
+  { path: 'home', component: Home, title: 'Home - MovieApp' },
   { path: 'wishlist', component: WishlistComponent, title: 'My Wishlist - MovieApp' },
   {path:'popular',component:Popular,title:'Popular Movies'},
     {path:'TopRated',component:TopRated,title:'TopRated Movies'},
@@ -20,7 +24,6 @@ export const routes: Routes = [
 
   // { path: 'movie:id', component: MovieDetailsComponent, title: 'Movie Details - MovieApp' },
   // { path: 'search', component: SearchComponent, title: 'Search - MovieApp' },
-  { path: 'login', component: AppComponent, title: 'Login - MovieApp' },
   // { path: 'register', component: RegisterComponent, title: 'Register - MovieApp' },
   // { path: 'account', component: AccountDetailsComponent, title: 'Account - MovieApp' },
   // { path: '**', component: NotFoundComponent, title: 'Page Not Found - MovieApp' }

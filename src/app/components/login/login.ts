@@ -1,64 +1,43 @@
-// import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, AbstractControl, FormsModule, FormControl, NgForm } from '@angular/forms';
-
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule],
+  standalone: true,
+  imports: [
+    CommonModule, 
+    FormsModule,
+    RouterModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule
+  ],
   templateUrl: './login.html',
-  styleUrl: './login.css'
-
+  styleUrls: ['./login.css']
 })
-export class AppComponent {
+export class LoginComponent {
 
   user = {
-    firstName: '',
-    lastName: '',
     email: '',
-    password: '',
-    confirmPassword: ''
+    password: ''
   };
 
-  showLogin = false; // false => show Register, true => show Login
-
-  constructor() {
-    // جلب المستخدم من LocalStorage لو موجود
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) {
-      console.log("Loaded User:", JSON.parse(savedUser));
+  constructor(private router: Router) {
+    // التحقق إذا كان المستخدم مسجل دخول بالفعل
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (isLoggedIn === 'true') {
+      this.router.navigate(['/home']);
     }
   }
-
-  // تسجيل المستخدم وتخزينه في LocalStorage
-  onRegister(form: any) {
-    if (form.valid && this.user.password === this.user.confirmPassword) {
-      // جلب المستخدمين الحاليين من LocalStorage
-      let users: any[] = [];
-      const savedUsers = localStorage.getItem('users');
-      if (savedUsers) {
-        users = JSON.parse(savedUsers);
-      }
-  
-      // التحقق من الايميل موجود بالفعل
-      const emailExists = users.some(u => u.email === this.user.email);
-      if (emailExists) {
-        alert('❌ Email already registered!');
-        return;
-      }
-  
-      // إضافة المستخدم الجديد
-      users.push(this.user);
-      localStorage.setItem('users', JSON.stringify(users));
-  
-      alert('✅ Registration successful!');
-      form.resetForm();
-      this.showLogin = true; // انتقل للصفحة Login بعد التسجيل
-    } else {
-      alert('❌ Form invalid or passwords do not match!');
-    }
-  }
-  
 
   // تسجيل الدخول
   onLogin(form: NgForm) {
@@ -71,7 +50,12 @@ export class AppComponent {
 
       if (foundUser) {
         if (foundUser.password === this.user.password) {
+          // حفظ حالة تسجيل الدخول
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('currentUser', JSON.stringify(foundUser));
           alert(`✅ Login successful! Welcome ${foundUser.firstName}`);
+          // التوجيه لصفحة Home
+          this.router.navigate(['/home']);
         } else {
           alert('❌ Incorrect password!');
         }
@@ -81,23 +65,6 @@ export class AppComponent {
     } else {
       alert('❌ Form invalid!');
     }
-
-}
-
-
-  
-
-  toggleForm() {
-    this.showLogin = !this.showLogin;
-  
-    const formContainer = document.querySelector('.form-container') as HTMLElement;
-    if (formContainer) {
-      formContainer.classList.remove('animate');
-      void formContainer.offsetWidth; // force reflow
-      formContainer.classList.add('animate');
-    }
   }
-  
-
 }
 
