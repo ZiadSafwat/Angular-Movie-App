@@ -12,7 +12,7 @@ export class MovieService {
   private http = inject(HttpClient);
   private languageService = inject(LanguageService);
   
-  private readonly API_KEY = 'your_api_key_here';
+  private readonly API_KEY = '542dd2bd8b7bec9ff41da1986ae577d1';
   private readonly BASE_URL = 'https://api.themoviedb.org/3';
   private readonly IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
 

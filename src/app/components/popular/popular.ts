@@ -4,8 +4,9 @@ import { Router, RouterLink } from '@angular/router';
 import { MovieList } from '../../services/movie-list';
 
 @Component({
+  standalone:true,
   selector: 'app-popular',
-  imports: [CommonModule],
+  imports: [CommonModule,],
   templateUrl: './popular.html',
   styleUrl: './popular.css'
 })
@@ -15,7 +16,7 @@ export class Popular {
   totalPages = 0;
   constructor(  
     public MovieService: MovieList,
-   
+   private router: Router
    )
    {
    
@@ -47,5 +48,9 @@ export class Popular {
   }
 goToPage(page: number) {
   this.loadMovies(page);
+}
+
+goToDetails(movieId: number) {
+  this.router.navigate(['/movie', movieId]);
 }
 }

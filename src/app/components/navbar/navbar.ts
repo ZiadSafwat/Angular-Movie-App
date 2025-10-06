@@ -64,10 +64,16 @@ export class NavbarComponent {
     // Update translations after language change
     this.translationService.updateTranslations();
   }
-onSearch(query: string) {
-  if (!query.trim()) return;
-  this.router.navigate(['/search'], { queryParams: { q: query } });
+onSearch(query: string, event?: Event) {
+  if (event) {
+    event.preventDefault(); 
+  }
+
+  if (query && query.trim().length > 0) {
+    this.router.navigate(['/search', query.trim()]);
+  }
 }
+
 
   logout(): void {
     this.authService.logout();

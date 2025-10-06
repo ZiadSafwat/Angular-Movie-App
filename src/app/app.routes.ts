@@ -6,6 +6,8 @@ import { TopRated } from './components/top-rated/top-rated';
 import { UpComing } from './components/up-coming/up-coming';
 import { Genres } from './components/genres/genres';
 import { MoviesByGenres } from './components/movies-by-genres/movies-by-genres';
+import { MovieDetails } from './components/movie-details/movie-details';
+import { Search } from './components/search/search';
 
 
 export const routes: Routes = [
@@ -17,8 +19,8 @@ export const routes: Routes = [
   {path:'genres',component:Genres,title:'Genres'},
    { path: 'genre/:id', component: MoviesByGenres, title: 'Movies by Genre' },
 
-  // { path: 'movie:id', component: MovieDetailsComponent, title: 'Movie Details - MovieApp' },
-  // { path: 'search', component: SearchComponent, title: 'Search - MovieApp' },
+  { path: 'movie/:id', component: MovieDetails, title: 'Movie Details - MovieApp' },
+  { path: 'search/:query', component: Search, title: 'Search - MovieApp' },
   // { path: 'login', component: LoginComponent, title: 'Login - MovieApp' },
   // { path: 'register', component: RegisterComponent, title: 'Register - MovieApp' },
   // { path: 'account', component: AccountDetailsComponent, title: 'Account - MovieApp' },

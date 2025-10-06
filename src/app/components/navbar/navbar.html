@@ -34,10 +34,17 @@
       <!-- Right Controls -->
       <div class="d-flex align-items-center">
         <!-- Search -->
-        <form class="d-flex me-3" (ngSubmit)="onSearch(searchInput.value)">
-          <input #searchInput class="form-control form-control-sm me-2" type="search" placeholder="Search..." />
-          <button class="btn btn-outline-warning btn-sm" type="submit">Search</button>
+       <!-- Search -->
+        <form class="d-flex align-items-center me-3 search-form" (submit)="onSearch(searchInput.value, $event)">
+         <input #searchInput
+              class="form-control form-control-sm me-2"
+              type="search"
+              placeholder="Search for a movie..."
+              style="min-width: 200px; padding: 0.4rem 0.75rem;" />
+         <button class="btn btn-outline-warning btn-sm" type="submit">Search</button>
         </form>
+
+
 
         <!-- Language Switch -->
         <select class="form-select form-select-sm me-3" 

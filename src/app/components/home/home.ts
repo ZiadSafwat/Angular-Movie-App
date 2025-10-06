@@ -50,4 +50,9 @@ export class Home {
 goToPage(page: number) {
   this.loadMovies(page);
 }
+
+
+goToDetails(movieId: number) {
+  this.router.navigate(['/movie', movieId]);
+}
 }

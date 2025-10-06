@@ -15,4 +15,13 @@
 .navbar .nav-link.active {
   border-bottom: 2px solid #f1c40f;
 }
+.search-form input[type="search"] {
+  transition: all 0.2s ease;
+}
+
+.search-form input[type="search"]:focus {
+  border-color: #ffc107;
+  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+}
+
 

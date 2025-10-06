@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { MovieList } from '../../services/movie-list';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
+  standalone:true,
   selector: 'app-top-rated',
   imports: [CommonModule],
   templateUrl: './top-rated.html',
@@ -12,7 +14,10 @@ export class TopRated {
   topRatedMovies: any[] = [];
   currentPage = 1;
   totalPages = 0;
-  constructor(public MovieService: MovieList) {}
+  constructor(
+    public MovieService: MovieList,
+    private router: Router
+  ) {}
   ngOnInit() {
     this.loadMovies(this.currentPage);
   }
@@ -40,4 +45,8 @@ export class TopRated {
   goToPage(page: number) {
     this.loadMovies(page);
   }
+
+  goToDetails(movieId: number) {
+  this.router.navigate(['/movie', movieId]);
+}
 }
