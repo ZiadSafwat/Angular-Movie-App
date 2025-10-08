@@ -1,48 +1,97 @@
-<div class="wrapper">
-  <mat-card class="register-card">
-    <mat-card-header>
-      <mat-card-title>
-        <h1>Register</h1>
-      </mat-card-title>
-    </mat-card-header>
+<div class="wrapper" [class.dark]="darkModeService.isDarkMode()" [class.rtl]="languageService.isRTL()">
+  <div class="register-card" [class.dark]="darkModeService.isDarkMode()">
+    <div class="card-header">
+      <h1>{{ translationService.t.register }}</h1>
+      <p class="subtitle">{{ languageService.currentLanguage() === 'ar' ? 'إنشاء حساب جديد' : 'Create your account' }}</p>
+    </div>
 
-    <mat-card-content>
-      <form #registerForm="ngForm" (ngSubmit)="onRegister(registerForm)">
+    <div class="card-content">
+      <form #registerForm="ngForm" (ngSubmit)="onRegister(registerForm)" class="register-form">
         
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>First Name</mat-label>
-          <input matInput type="text" name="firstName" [(ngModel)]="user.firstName" required>
-        </mat-form-field>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">{{ languageService.currentLanguage() === 'ar' ? 'الاسم الأول' : 'First Name' }}</label>
+            <input 
+              type="text" 
+              id="firstName"
+              name="firstName" 
+              [(ngModel)]="user.firstName" 
+              required
+              class="form-input"
+              [placeholder]="languageService.currentLanguage() === 'ar' ? 'أدخل اسمك الأول' : 'Enter your first name'"
+            >
+          </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Last Name</mat-label>
-          <input matInput type="text" name="lastName" [(ngModel)]="user.lastName" required>
-        </mat-form-field>
+          <div class="form-group">
+            <label for="lastName">{{ languageService.currentLanguage() === 'ar' ? 'اسم العائلة' : 'Last Name' }}</label>
+            <input 
+              type="text" 
+              id="lastName"
+              name="lastName" 
+              [(ngModel)]="user.lastName" 
+              required
+              class="form-input"
+              [placeholder]="languageService.currentLanguage() === 'ar' ? 'أدخل اسم العائلة' : 'Enter your last name'"
+            >
+          </div>
+        </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Email</mat-label>
-          <input matInput type="email" name="email" [(ngModel)]="user.email" required email>
-        </mat-form-field>
+        <div class="form-group">
+          <label for="email">{{ languageService.currentLanguage() === 'ar' ? 'البريد الإلكتروني' : 'Email' }}</label>
+          <input 
+            type="email" 
+            id="email"
+            name="email" 
+            [(ngModel)]="user.email" 
+            required 
+            email
+            class="form-input"
+            [placeholder]="languageService.currentLanguage() === 'ar' ? 'أدخل بريدك الإلكتروني' : 'Enter your email'"
+          >
+        </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Password</mat-label>
-          <input matInput type="password" name="password" [(ngModel)]="user.password" required minlength="8">
-        </mat-form-field>
+        <div class="form-group">
+          <label for="password">{{ languageService.currentLanguage() === 'ar' ? 'كلمة المرور' : 'Password' }}</label>
+          <input 
+            type="password" 
+            id="password"
+            name="password" 
+            [(ngModel)]="user.password" 
+            required 
+            minlength="8"
+            class="form-input"
+            [placeholder]="languageService.currentLanguage() === 'ar' ? 'أدخل كلمة المرور (8 أحرف على الأقل)' : 'Enter password (min 8 characters)'"
+          >
+        </div>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Confirm Password</mat-label>
-          <input matInput type="password" name="confirmPassword" [(ngModel)]="user.confirmPassword" required>
-        </mat-form-field>
+        <div class="form-group">
+          <label for="confirmPassword">{{ languageService.currentLanguage() === 'ar' ? 'تأكيد كلمة المرور' : 'Confirm Password' }}</label>
+          <input 
+            type="password" 
+            id="confirmPassword"
+            name="confirmPassword" 
+            [(ngModel)]="user.confirmPassword" 
+            required
+            class="form-input"
+            [placeholder]="languageService.currentLanguage() === 'ar' ? 'أعد إدخال كلمة المرور' : 'Re-enter your password'"
+          >
+        </div>
 
-        <button mat-raised-button color="primary" type="submit" [disabled]="registerForm.invalid" class="full-width">
-          Register
+        <button 
+          type="submit" 
+          [disabled]="registerForm.invalid || user.password !== user.confirmPassword" 
+          class="submit-btn"
+          [class.disabled]="registerForm.invalid || user.password !== user.confirmPassword"
+        >
+          <span class="btn-text">{{ translationService.t.register }}</span>
+          <span class="btn-icon">✓</span>
         </button>
 
         <p class="switch-text">
-          Already have an account? 
-          <a routerLink="/login" class="link">Login</a>
+          {{ languageService.currentLanguage() === 'ar' ? 'لديك حساب بالفعل؟' : 'Already have an account?' }}
+          <a routerLink="/login" class="link">{{ translationService.t.login }}</a>
         </p>
       </form>
-    </mat-card-content>
-  </mat-card>
+    </div>
+  </div>
 </div>

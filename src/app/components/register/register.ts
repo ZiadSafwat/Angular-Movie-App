@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -7,6 +7,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { DarkModeService } from '../../services/dark-mode';
+import { LanguageService } from '../../services/language';
+import { TranslationService } from '../../services/translation';
 
 @Component({
   selector: 'app-register',
@@ -25,6 +28,9 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./register.css']
 })
 export class RegisterComponent {
+  darkModeService = inject(DarkModeService);
+  languageService = inject(LanguageService);
+  translationService = inject(TranslationService);
 
   user = {
     firstName: '',

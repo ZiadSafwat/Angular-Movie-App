@@ -1,14 +1,11 @@
-// components/navbar/navbar.component.ts
-import { Component, inject, signal, HostListener } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { WishlistService } from '../../services/wishlist';
 import { DarkModeService } from '../../services/dark-mode';
 import { LanguageService } from '../../services/language';
 import { AuthService } from '../../services/auth.service';
-import { TranslationService } from '../../services/translation';
 import { DarkModeToggleComponent } from '../dark-mode-toggle/dark-mode-toggle';
- 
 
 @Component({
   selector: 'app-navbar',
@@ -17,25 +14,63 @@ import { DarkModeToggleComponent } from '../dark-mode-toggle/dark-mode-toggle';
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css']
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   wishlistService = inject(WishlistService);
   darkModeService = inject(DarkModeService);
   languageService = inject(LanguageService);
-  translationService = inject(TranslationService);
   authService = inject(AuthService);
+  router = inject(Router);
 
-  isMobileMenuOpen = signal(false);
-  showUserMenu = signal(false);
-  constructor(
-    private router: Router  
-  ) {}
+  translations: any = {};
+  isMobileMenuOpen = signal<boolean>(false);
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: Event): void {
-    const target = event.target as HTMLElement;
-    if (!target.closest('.user-menu')) {
-      this.showUserMenu.set(false);
+  async ngOnInit() {
+    // Load translations JSON
+    await this.loadTranslations();
+  }
+
+  private async loadTranslations() {
+    try {
+      const res = await fetch('assets/i18n/navbar-translations.json');
+      this.translations = await res.json();
+    } catch (error) {
+      console.error('Failed to load translations:', error);
+      this.translations = {
+        en: {},
+        ar: {}
+      };
     }
+  }
+
+
+  changeLanguage(event: Event) {
+    const lang = (event.target as HTMLSelectElement).value as 'en' | 'ar';
+    
+    // Get current route to reload the same page
+    const currentRoute = this.router.url;
+    
+    // Use the LanguageService to change language
+    this.languageService.setLanguage(lang);
+    
+    // Force reload of current page to refresh data
+    setTimeout(() => {
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate([currentRoute]);
+      });
+    }, 100);
+  }
+  toggleMobileMenu() {
+    this.isMobileMenuOpen.update(open => !open);
+  }
+
+  closeMobileMenu() {
+    this.isMobileMenuOpen.set(false);
+  }
+
+  t(key: string): string {
+    // Use the current language from LanguageService
+    const lang = this.languageService.currentLanguage();
+    return this.translations?.[lang]?.[key] ?? key;
   }
 
   isLoggedIn(): boolean {
@@ -46,59 +81,16 @@ export class NavbarComponent {
     return this.authService.getCurrentUser() || 'User';
   }
 
-  toggleMobileMenu(): void {
-    this.isMobileMenuOpen.update(open => !open);
+  onSearch(query: string, event?: Event) {
+    if (event) event.preventDefault();
+    if (query && query.trim().length > 0) {
+      this.router.navigate(['/search', query.trim()]);
+      this.closeMobileMenu(); // Close mobile menu after search
+    }
   }
-
-  closeMobileMenu(): void {
-    this.isMobileMenuOpen.set(false);
-  }
-
-  toggleUserMenu(): void {
-    this.showUserMenu.update(show => !show);
-  }
-
-  onLanguageChange(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    this.languageService.setLanguage(select.value as any);
-    // Update translations after language change
-    this.translationService.updateTranslations();
-  }
-onSearch(query: string, event?: Event) {
-  if (event) {
-    event.preventDefault(); 
-  }
-
-  if (query && query.trim().length > 0) {
-    this.router.navigate(['/search', query.trim()]);
-  }
-}
-
 
   logout(): void {
     this.authService.logout();
-    this.showUserMenu.set(false);
-    // Optional: Redirect to home page
-    // this.router.navigate(['/']);
-  }
-
-  getTranslation(key: string): string {
-    // Map old keys to new translation keys
-    const keyMap: { [key: string]: string } = {
-      'Movies': 'movies',
-      'Wishlist': 'favorites',
-      'Search': 'search',
-      'Login': 'login',
-      'Register': 'register',
-      'Account': 'profile',
-      'Logout': 'logout'
-    };
-
-    const translationKey = keyMap[key];
-    if (translationKey && translationKey in this.translationService.t) {
-      return this.translationService.t[translationKey as keyof typeof this.translationService.t];
-    }
-    
-    return key;
+    this.closeMobileMenu();
   }
 }

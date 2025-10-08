@@ -9,7 +9,7 @@ import { LanguageService } from '../../services/language';
   selector: 'app-dark-mode-toggle',
   standalone: true,
   imports: [CommonModule],
-  template: ` `,
+  templateUrl: './dark-mode-toggle.html',
   styles: [`
     .dark-mode-toggle {
       display: flex;

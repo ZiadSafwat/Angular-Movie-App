@@ -42,6 +42,7 @@ export interface TranslationKeys {
   myWishlist: string;
   wishlistDescription: string;
   movie: string;
+  moviesPlural: string;
   clearAll: string;
   wishlistEmpty: string;
   startAddingMovies: string;
@@ -123,6 +124,7 @@ export class TranslationService {
         myWishlist: 'My Wishlist',
         wishlistDescription: 'Movies you\'ve added to your wishlist',
         movie: 'movie',
+        moviesPlural: 'movies',
         clearAll: 'Clear All',
         wishlistEmpty: 'Your wishlist is empty',
         startAddingMovies: 'Start adding some movies to your wishlist!',
@@ -172,6 +174,7 @@ export class TranslationService {
         myWishlist: 'قائمة المفضلة',
         wishlistDescription: 'الأفلام التي أضفتها إلى قائمة المفضلة',
         movie: 'فيلم',
+        moviesPlural: 'أفلام',
         clearAll: 'مسح الكل',
         wishlistEmpty: 'قائمة المفضلة فارغة',
         startAddingMovies: 'ابدأ بإضافة بعض الأفلام إلى قائمة المفضلة!',

@@ -1,77 +1,150 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
   <div class="container-fluid">
     <!-- Brand -->
-    <a class="navbar-brand fw-bold text-warning" >MovieApp</a>
+    <a class="navbar-brand fw-bold text-warning" routerLink="/home">   {{ t('app_Name') }}</a>
 
-    <!-- Toggler for mobile -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+    <!-- Mobile Toggler -->
+    <button class="navbar-toggler" 
+            type="button" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#mainNavbar"
+            aria-controls="mainNavbar"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            (click)="toggleMobileMenu()">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="mainNavbar">
-      <!-- Center Links -->
-      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+    <div class="collapse navbar-collapse" id="mainNavbar" [class.show]="isMobileMenuOpen()">
+      <!-- Navigation Links -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-<a class="nav-link" 
-   routerLink="/movies/now_playing" 
-   routerLinkActive="active"  
-   [routerLinkActiveOptions]="{ exact: true }">
-  Now Playing
-</a>
+          <a class="nav-link" 
+             routerLink="/movies/now_playing" 
+             routerLinkActive="active" 
+             [routerLinkActiveOptions]="{ exact: true }"
+             (click)="closeMobileMenu()">
+            {{ t('now_playing') }}
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/movies/popular" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Popular</a>
+          <a class="nav-link" 
+             routerLink="/movies/popular" 
+             routerLinkActive="active" 
+             [routerLinkActiveOptions]="{ exact: true }"
+             (click)="closeMobileMenu()">
+            {{ t('popular') }}
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/movies/top_rated" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Top Rated</a>
+          <a class="nav-link" 
+             routerLink="/movies/top_rated" 
+             routerLinkActive="active" 
+             [routerLinkActiveOptions]="{ exact: true }"
+             (click)="closeMobileMenu()">
+            {{ t('top_rated') }}
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/movies/upcoming" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Upcoming</a>
+          <a class="nav-link" 
+             routerLink="/movies/upcoming" 
+             routerLinkActive="active" 
+             [routerLinkActiveOptions]="{ exact: true }"
+             (click)="closeMobileMenu()">
+            {{ t('upcoming') }}
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/genres" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Genres</a>
+          <a class="nav-link" 
+             routerLink="/genres" 
+             routerLinkActive="active" 
+             [routerLinkActiveOptions]="{ exact: true }"
+             (click)="closeMobileMenu()">
+            {{ t('genres') }}
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/wishlist" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Favourites</a>
+          <a class="nav-link" 
+             routerLink="/wishlist" 
+             routerLinkActive="active" 
+             [routerLinkActiveOptions]="{ exact: true }"
+             (click)="closeMobileMenu()">
+            {{ t('favorites') }}
+          </a>
         </li>
       </ul>
 
       <!-- Right Controls -->
-      <div class="d-flex align-items-center">
-        <!-- Search -->
-       <!-- Search -->
-        <form class="d-flex align-items-center me-3 search-form" (submit)="onSearch(searchInput.value, $event)">
-         <input #searchInput
-              class="form-control form-control-sm me-2"
-              type="search"
-              placeholder="Search for a movie..."
-              style="min-width: 200px; padding: 0.4rem 0.75rem;" />
-         <button class="btn btn-outline-warning btn-sm" type="submit">Search</button>
+      <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2 w-100 w-lg-auto">
+        
+        <!-- Search Form -->
+        <form class="d-flex align-items-center search-form w-100 w-lg-auto mb-2 mb-lg-0" 
+              (submit)="onSearch(searchInput.value, $event)">
+          <div class="input-group input-group-sm">
+            <input #searchInput
+                   class="form-control"
+                   type="search"
+                   [placeholder]="t('search_placeholder')"
+                   aria-label="Search" />
+            <button class="btn btn-outline-warning" type="submit">
+              {{ t('search') }}
+            </button>
+          </div>
         </form>
 
+        <!-- Controls Row -->
+        <div class="d-flex flex-wrap align-items-center gap-2 w-100 w-lg-auto">
+          
+          <!-- Dark Mode Toggle -->
+          <app-dark-mode-toggle class="flex-shrink-0"></app-dark-mode-toggle>
 
+          <!-- Language Switch -->
+          <select class="form-select form-select-sm flex-shrink-0"
+                  [value]="languageService.currentLanguage()"
+                  (change)="changeLanguage($event)"
+                  style="width: auto; min-width: 100px;">
+            <option value="en">English</option>
+            <option value="ar">العربية</option>
+          </select>
 
-        <!-- Language Switch -->
-        <select class="form-select form-select-sm me-3" 
-                [value]="languageService.currentLanguage()" 
-                (change)="onLanguageChange($event)">
-          <option *ngFor="let lang of languageService.languages" [value]="lang.code">
-            {{ lang.name }}
-          </option>
-        </select>
+          <!-- Auth Buttons -->
+          <div *ngIf="!isLoggedIn()" class="d-flex gap-2 flex-shrink-0">
+            <a routerLink="/login" 
+               class="btn btn-outline-light btn-sm"
+               (click)="closeMobileMenu()">
+              {{ t('login') }}
+            </a>
+            <a routerLink="/register" 
+               class="btn btn-warning btn-sm"
+               (click)="closeMobileMenu()">
+              {{ t('register') }}
+            </a>
+          </div>
 
-        <!-- Auth -->
-        <a *ngIf="!isLoggedIn()" routerLink="/login" class="btn btn-outline-light btn-sm me-2">Login</a>
-        <a *ngIf="!isLoggedIn()" routerLink="/register" class="btn btn-warning btn-sm">Register</a>
-
-        <div *ngIf="isLoggedIn()" class="dropdown">
-          <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
-            👤 {{ getCurrentUser() }}
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" routerLink="/account">Account</a></li>
-            <li><button class="dropdown-item text-danger" (click)="logout()">Logout</button></li>
-          </ul>
+          <!-- User Dropdown -->
+          <div *ngIf="isLoggedIn()" class="dropdown flex-shrink-0">
+            <button class="btn btn-outline-light btn-sm dropdown-toggle" 
+                    type="button" 
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+              👤 {{ getCurrentUser() }}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" 
+                   routerLink="/account"
+                   (click)="closeMobileMenu()">
+                  {{ t('profile') }}
+                </a>
+              </li>
+              <li>
+                <button class="dropdown-item text-danger" 
+                        (click)="logout()">
+                  {{ t('logout') }}
+                </button>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

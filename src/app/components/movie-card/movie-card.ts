@@ -9,7 +9,7 @@ import { DarkModeService } from '../../services/dark-mode';
 import { NotificationService } from '../../services/notification';
 import { TranslationService } from '../../services/translation';
 import { Movie } from '../../models/movie.model';
- 
+
 @Component({
   selector: 'app-movie-card',
   standalone: true,
@@ -41,12 +41,25 @@ export class MovieCardComponent {
     return this.wishlistService.isInWishlist(this.movie().id);
   }
 
-  toggleWishlist(): void {
-    this.wishlistService.toggleWishlist(this.movie());
+  toggleWishlist(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    
+    // Add a small delay to ensure event propagation is fully stopped
+    setTimeout(() => {
+      this.wishlistService.toggleWishlist(this.movie());
+    }, 0);
   }
 
-  removeFromWishlist(): void {
-    this.wishlistService.removeFromWishlist(this.movie().id);
+  removeFromWishlist(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    
+    setTimeout(() => {
+      this.wishlistService.removeFromWishlist(this.movie().id);
+    }, 0);
   }
 
   truncateOverview(): string {

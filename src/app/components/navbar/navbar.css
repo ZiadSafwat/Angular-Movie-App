@@ -1,6 +1,8 @@
+/* Navbar Base Styles */
 .navbar .nav-link {
   color: #ddd;
   transition: color 0.2s;
+  padding: 0.5rem 1rem;
 }
 
 .navbar .nav-link.active,
@@ -8,13 +10,16 @@
   color: #f1c40f; /* yellow highlight */
 }
 
+.navbar .nav-link.active {
+  border-bottom: 2px solid #f1c40f;
+}
+
 .navbar-brand {
   font-size: 1.3rem;
   letter-spacing: 1px;
 }
-.navbar .nav-link.active {
-  border-bottom: 2px solid #f1c40f;
-}
+
+/* Search Form Styles */
 .search-form input[type="search"] {
   transition: all 0.2s ease;
 }
@@ -24,4 +29,118 @@
   box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
 }
 
+/* Mobile Styles */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    padding-top: 1rem;
+  }
+  
+  .navbar-nav {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .nav-item {
+    margin: 0.25rem 0;
+  }
+  
+  .search-form {
+    margin-bottom: 1rem;
+  }
+  
+  .search-form .input-group {
+    width: 100%;
+  }
+  
+  .search-form input[type="search"] {
+    min-width: auto;
+  }
+  
+  /* Mobile dropdown menu animation */
+  .navbar-collapse {
+    transition: all 0.3s ease;
+  }
+  
+  .navbar-collapse:not(.show) {
+    display: none;
+  }
+}
 
+/* Desktop Styles */
+@media (min-width: 992px) {
+  .navbar-nav .nav-link {
+    padding: 0.5rem 1rem;
+  }
+  
+  .search-form {
+    min-width: 300px;
+  }
+}
+
+/* RTL Support */
+.rtl .navbar-nav {
+  margin-right: auto !important;
+  margin-left: 0 !important;
+}
+
+.rtl .me-auto {
+  margin-right: 0 !important;
+  margin-left: auto !important;
+}
+
+.rtl .dropdown-menu-end {
+  right: auto !important;
+  left: 0 !important;
+}
+
+/* Mobile RTL Adjustments */
+@media (max-width: 991.98px) {
+  .rtl .navbar-nav {
+    text-align: right;
+  }
+}
+
+/* Improved focus styles for accessibility */
+.navbar-toggler:focus,
+.nav-link:focus,
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
+  border-color: #ffc107;
+}
+
+/* Smooth transitions */
+.navbar-collapse {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Better spacing for mobile controls */
+@media (max-width: 991.98px) {
+  .d-flex.flex-wrap {
+    justify-content: center;
+    gap: 0.75rem !important;
+  }
+  
+  .btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Input group adjustments for mobile */
+@media (max-width: 576px) {
+  .input-group {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .input-group .form-control {
+    border-radius: 0.375rem !important;
+  }
+  
+  .input-group .btn {
+    border-radius: 0.375rem !important;
+    width: 100%;
+  }
+}

@@ -1,176 +1,203 @@
 /* components/movie-card/movie-card.component.css */
 .movie-card {
-    background: var(--card-bg);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
-    position: relative;
-  }
-  
-  .movie-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
-  }
-  
-  .movie-card.dark {
-    border: 1px solid var(--border-color);
-  }
-  
-  /* Card Image */
+  background: var(--card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  cursor: default; /* Remove pointer cursor from entire card */
+}
+
+.movie-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+.movie-card.dark {
+  border: 1px solid var(--border-color);
+}
+
+/* Card Image */
+.card-image {
+  position: relative;
+  height: 400px;
+  overflow: hidden;
+}
+
+.movie-poster {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  cursor: pointer; /* Only the image should have pointer cursor */
+}
+
+.movie-card:hover .movie-poster {
+  transform: scale(1.05);
+}
+
+/* Buttons */
+.wishlist-btn, .remove-btn {
+  position: absolute;
+  top: 12px;
+  background: rgba(0,0,0,0.7);
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  z-index: 20; /* Ensure buttons are above other content */
+}
+
+.wishlist-btn {
+  right: 12px;
+}
+
+.remove-btn {
+  left: 12px;
+  background: rgba(244, 67, 54, 0.8);
+}
+
+.wishlist-btn:hover, .remove-btn:hover {
+  transform: scale(1.1);
+  background: rgba(0,0,0,0.9);
+}
+
+.remove-btn:hover {
+  background: rgba(244, 67, 54, 1);
+}
+
+.wishlist-btn.in-wishlist {
+  background: rgba(233, 30, 99, 0.9);
+}
+
+.wishlist-btn.in-wishlist:hover {
+  background: rgba(233, 30, 99, 1);
+}
+
+/* Rating Badge */
+.rating-badge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(0,0,0,0.8);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
+  pointer-events: none; /* Prevent rating badge from interfering with clicks */
+}
+
+/* Card Content */
+.card-content {
+  padding: 1.5rem;
+}
+
+.movie-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: var(--text-color);
+}
+
+.movie-date {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.movie-overview {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Card Actions */
+.card-actions {
+  margin-top: auto;
+}
+
+.details-btn {
+  display: inline-block;
+  background: var(--primary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  text-align: center;
+  width: 100%;
+  cursor: pointer;
+}
+
+.details-btn:hover {
+  background: color-mix(in srgb, var(--primary-color) 90%, black);
+  transform: translateY(-1px);
+}
+
+/* Make only specific elements clickable for navigation */
+.clickable {
+  cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .card-image {
-    position: relative;
-    height: 400px;
-    overflow: hidden;
-  }
-  
-  .movie-poster {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-  
-  .movie-card:hover .movie-poster {
-    transform: scale(1.05);
-  }
-  
-  /* Buttons */
-  .wishlist-btn, .remove-btn {
-    position: absolute;
-    top: 12px;
-    background: rgba(0,0,0,0.7);
-    border: none;
-    border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-  }
-  
-  .wishlist-btn {
-    right: 12px;
-  }
-  
-  .remove-btn {
-    left: 12px;
-    background: rgba(244, 67, 54, 0.8);
-  }
-  
-  .wishlist-btn:hover, .remove-btn:hover {
-    transform: scale(1.1);
-    background: rgba(0,0,0,0.9);
-  }
-  
-  .remove-btn:hover {
-    background: rgba(244, 67, 54, 1);
-  }
-  
-  .wishlist-btn.in-wishlist {
-    background: rgba(233, 30, 99, 0.9);
-  }
-  
-  .wishlist-btn.in-wishlist:hover {
-    background: rgba(233, 30, 99, 1);
-  }
-  
-  /* Rating Badge */
-  .rating-badge {
-    position: absolute;
-    bottom: 12px;
-    left: 12px;
-    background: rgba(0,0,0,0.8);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    backdrop-filter: blur(10px);
-  }
-  
-  /* Card Content */
-  .card-content {
-    padding: 1.5rem;
+    height: 350px;
   }
   
   .movie-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    line-height: 1.3;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    color: var(--text-color);
+    font-size: 1.1rem;
   }
   
-  .movie-date {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    margin-bottom: 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
+  .card-content {
+    padding: 1rem;
   }
   
-  .movie-overview {
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    line-height: 1.4;
-    margin-bottom: 1rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+  .wishlist-btn, .remove-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
   }
-  
-  /* Card Actions */
-  .card-actions {
-    margin-top: auto;
-  }
-  
-  .details-btn {
-    display: inline-block;
-    background: var(--primary-color);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-    text-align: center;
-    width: 100%;
-  }
-  
-  .details-btn:hover {
-    background: color-mix(in srgb, var(--primary-color) 90%, black);
-    transform: translateY(-1px);
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .card-image {
-      height: 350px;
-    }
-    
-    .movie-title {
-      font-size: 1.1rem;
-    }
-    
-    .card-content {
-      padding: 1rem;
-    }
-    
-    .wishlist-btn, .remove-btn {
-      width: 40px;
-      height: 40px;
-      font-size: 1.1rem;
-    }
-  }
+}
+
+/* Enhanced button styles for better click isolation */
+.wishlist-btn:focus,
+.remove-btn:focus {
+  outline: 2px solid rgba(255, 193, 7, 0.8);
+  outline-offset: 2px;
+}
+
+/* Prevent text selection on buttons */
+.wishlist-btn,
+.remove-btn,
+.details-btn {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
