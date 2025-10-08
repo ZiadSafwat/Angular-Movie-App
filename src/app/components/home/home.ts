@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { MovieList } from '../../services/movie-list';
-import { Router, RouterLink } from '@angular/router';
-import { Observable } from 'rxjs';
-import { Movie } from '../../models/movie.model';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -15,24 +13,29 @@ export class Home {
   movies: any[] = [];
   currentPage = 1;
   totalPages = 0;
-  constructor(  
+  category: 'now_playing' | 'popular' | 'top_rated' | 'upcoming' = 'now_playing';
+
+  constructor(
     public MovieService: MovieList,
-    private router: Router,  
-   )
-   {
-   
-  }
-   ngOnInit() {
-    this.loadMovies(this.currentPage);
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    
+    this.route.paramMap.subscribe(params => {
+      const cat = params.get('category') as any;
+      this.category = cat || 'now_playing';
+      this.loadMovies(this.currentPage);
+    });
   }
 
   loadMovies(page: number) {
-    this.MovieService.getMovies('now_playing',page).subscribe((data) => {
+    this.MovieService.getMovies(this.category, page).subscribe(data => {
       this.movies = data.results;
       this.totalPages = data.total_pages;
       this.currentPage = data.page;
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 

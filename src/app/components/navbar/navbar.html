@@ -12,16 +12,21 @@
       <!-- Center Links -->
       <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/home" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Now Playing</a>
+<a class="nav-link" 
+   routerLink="/movies/now_playing" 
+   routerLinkActive="active"  
+   [routerLinkActiveOptions]="{ exact: true }">
+  Now Playing
+</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/popular" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Popular</a>
+          <a class="nav-link" routerLink="/movies/popular" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Popular</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/TopRated" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Top Rated</a>
+          <a class="nav-link" routerLink="/movies/top_rated" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Top Rated</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/upcoming" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Upcoming</a>
+          <a class="nav-link" routerLink="/movies/upcoming" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Upcoming</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/genres" routerLinkActive="active"  [routerLinkActiveOptions]="{ exact: true }">Genres</a>
