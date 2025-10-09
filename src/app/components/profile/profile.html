@@ -1,0 +1,281 @@
+<div class="profile-container" [class.dark]="darkModeService.isDarkMode()" [class.rtl]="languageService.isRTL()">
+  <div class="container py-5">
+    <!-- Header -->
+    <div class="row justify-content-center mb-4">
+      <div class="col-lg-8">
+        <div class="d-flex align-items-center mb-4">
+          <button class="btn btn-outline-secondary me-3" (click)="goBack()">
+            <i class="fas fa-arrow-left"></i>
+            {{ languageService.currentLanguage() === 'ar' ? 'رجوع' : 'Back' }}
+          </button>
+          <h1 class="page-title mb-0">
+            <i class="fas fa-user-circle me-2"></i>
+            {{ languageService.currentLanguage() === 'ar' ? 'الملف الشخصي' : 'Profile' }}
+          </h1>
+        </div>
+      </div>
+    </div>
+
+    <!-- Profile Card -->
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="profile-card card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h3 class="card-title mb-0">
+              <i class="fas fa-user-edit me-2"></i>
+              {{ languageService.currentLanguage() === 'ar' ? 'معلومات المستخدم' : 'User Information' }}
+            </h3>
+          </div>
+          
+          <div class="card-body p-4">
+            <!-- View Mode -->
+            <div *ngIf="!isEditing" class="view-mode">
+              <div class="row">
+                <!-- Avatar Section -->
+                <div class="col-md-3 text-center mb-4">
+                  <div class="avatar-section">
+                    <div class="avatar-display">
+                      <span class="avatar-icon">{{ currentUser?.avatar || '👤' }}</span>
+                    </div>
+                    <h4 class="username mt-3">{{ currentUser?.username }}</h4>
+                    <p class="text-muted join-date">
+                      <small>
+                        <i class="fas fa-calendar-alt me-1"></i>
+                        {{ languageService.currentLanguage() === 'ar' ? 'منضم منذ' : 'Joined' }} 
+                        {{ getJoinDate() }}
+                      </small>
+                    </p>
+                  </div>
+                </div>
+
+                <!-- User Details -->
+                <div class="col-md-9">
+                  <div class="user-details">
+                    <div class="row">
+                      <div class="col-sm-6 mb-3">
+                        <label class="detail-label">
+                          <i class="fas fa-envelope me-2"></i>
+                          {{ languageService.currentLanguage() === 'ar' ? 'البريد الإلكتروني' : 'Email' }}
+                        </label>
+                        <p class="detail-value">{{ currentUser?.email }}</p>
+                      </div>
+                      
+                      <div class="col-sm-6 mb-3">
+                        <label class="detail-label">
+                          <i class="fas fa-user me-2"></i>
+                          {{ languageService.currentLanguage() === 'ar' ? 'الاسم الأول' : 'First Name' }}
+                        </label>
+                        <p class="detail-value">{{ currentUser?.firstName || 'Not set' }}</p>
+                      </div>
+                      
+                      <div class="col-sm-6 mb-3">
+                        <label class="detail-label">
+                          <i class="fas fa-user me-2"></i>
+                          {{ languageService.currentLanguage() === 'ar' ? 'اسم العائلة' : 'Last Name' }}
+                        </label>
+                        <p class="detail-value">{{ currentUser?.lastName || 'Not set' }}</p>
+                      </div>
+                      
+                      <div class="col-sm-6 mb-3">
+                        <label class="detail-label">
+                          <i class="fas fa-phone me-2"></i>
+                          {{ languageService.currentLanguage() === 'ar' ? 'رقم الهاتف' : 'Phone' }}
+                        </label>
+                        <p class="detail-value">{{ currentUser?.phone || 'Not set' }}</p>
+                      </div>
+                      
+                      <div class="col-12 mb-3" *ngIf="currentUser?.bio">
+                        <label class="detail-label">
+                          <i class="fas fa-info-circle me-2"></i>
+                          {{ languageService.currentLanguage() === 'ar' ? 'نبذة' : 'Bio' }}
+                        </label>
+                        <p class="detail-value bio-text">{{ currentUser?.bio }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="row mt-4">
+                <div class="col-12">
+                  <div class="d-flex gap-2 flex-wrap">
+                    <button class="btn btn-primary" (click)="enableEditing()">
+                      <i class="fas fa-edit me-2"></i>
+                      {{ languageService.currentLanguage() === 'ar' ? 'تعديل الملف' : 'Edit Profile' }}
+                    </button>
+                    <button class="btn btn-outline-secondary" routerLink="/change-password">
+                      <i class="fas fa-lock me-2"></i>
+                      {{ languageService.currentLanguage() === 'ar' ? 'تغيير كلمة المرور' : 'Change Password' }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Edit Mode -->
+            <form *ngIf="isEditing" [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="edit-mode">
+              <div class="row">
+                <!-- Avatar Selection -->
+                <div class="col-md-3 text-center mb-4">
+                  <div class="avatar-section">
+                    <div class="avatar-display edit">
+                      <span class="avatar-icon">{{ profileForm.get('avatar')?.value }}</span>
+                    </div>
+                    <label class="form-label mt-3">
+                      {{ languageService.currentLanguage() === 'ar' ? 'اختر الصورة الرمزية' : 'Choose Avatar' }}
+                    </label>
+                    
+                    <div class="avatar-grid">
+                      <button type="button" 
+                              *ngFor="let avatar of avatarOptions" 
+                              class="avatar-option"
+                              [class.selected]="profileForm.get('avatar')?.value === avatar"
+                              (click)="selectAvatar(avatar)">
+                        {{ avatar }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Form Fields -->
+                <div class="col-md-9">
+                  <div class="row">
+                    <!-- Username -->
+                    <div class="col-md-6 mb-3">
+                      <label for="username" class="form-label">
+                        <i class="fas fa-at me-1"></i>
+                        {{ languageService.currentLanguage() === 'ar' ? 'اسم المستخدم' : 'Username' }}
+                        <span class="text-danger">*</span>
+                      </label>
+                      <input type="text" 
+                             id="username"
+                             formControlName="username"
+                             class="form-control"
+                             [class.is-invalid]="hasError('username', 'required') || hasError('username', 'minlength')">
+                      <div class="invalid-feedback" *ngIf="hasError('username', 'required') || hasError('username', 'minlength')">
+                        {{ getErrorMessage('username') }}
+                      </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="col-md-6 mb-3">
+                      <label for="email" class="form-label">
+                        <i class="fas fa-envelope me-1"></i>
+                        {{ languageService.currentLanguage() === 'ar' ? 'البريد الإلكتروني' : 'Email' }}
+                        <span class="text-danger">*</span>
+                      </label>
+                      <input type="email" 
+                             id="email"
+                             formControlName="email"
+                             class="form-control"
+                           
+                             [disabled]="true">
+                      <small class="text-muted">
+                        {{ languageService.currentLanguage() === 'ar' ? 'لا يمكن تغيير البريد الإلكتروني' : 'Email cannot be changed' }}
+                      </small>
+                    </div>
+
+                    <!-- First Name -->
+                    <div class="col-md-6 mb-3">
+                      <label for="firstName" class="form-label">
+                        <i class="fas fa-user me-1"></i>
+                        {{ languageService.currentLanguage() === 'ar' ? 'الاسم الأول' : 'First Name' }}
+                        <span class="text-danger">*</span>
+                      </label>
+                      <input type="text" 
+                             id="firstName"
+                             formControlName="firstName"
+                             class="form-control"
+                             [class.is-invalid]="hasError('firstName', 'required') || hasError('firstName', 'minlength')">
+                      <div class="invalid-feedback" *ngIf="hasError('firstName', 'required') || hasError('firstName', 'minlength')">
+                        {{ getErrorMessage('firstName') }}
+                      </div>
+                    </div>
+
+                    <!-- Last Name -->
+                    <div class="col-md-6 mb-3">
+                      <label for="lastName" class="form-label">
+                        <i class="fas fa-user me-1"></i>
+                        {{ languageService.currentLanguage() === 'ar' ? 'اسم العائلة' : 'Last Name' }}
+                        <span class="text-danger">*</span>
+                      </label>
+                      <input type="text" 
+                             id="lastName"
+                             formControlName="lastName"
+                             class="form-control"
+                             [class.is-invalid]="hasError('lastName', 'required') || hasError('lastName', 'minlength')">
+                      <div class="invalid-feedback" *ngIf="hasError('lastName', 'required') || hasError('lastName', 'minlength')">
+                        {{ getErrorMessage('lastName') }}
+                      </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="col-md-6 mb-3">
+                      <label for="phone" class="form-label">
+                        <i class="fas fa-phone me-1"></i>
+                        {{ languageService.currentLanguage() === 'ar' ? 'رقم الهاتف' : 'Phone' }}
+                      </label>
+                      <input type="tel" 
+                             id="phone"
+                             formControlName="phone"
+                             class="form-control"
+                             [class.is-invalid]="hasError('phone', 'pattern')">
+                      <div class="invalid-feedback" *ngIf="hasError('phone', 'pattern')">
+                        {{ getErrorMessage('phone') }}
+                      </div>
+                    </div>
+
+                    <!-- Bio -->
+                    <div class="col-12 mb-3">
+                      <label for="bio" class="form-label">
+                        <i class="fas fa-info-circle me-1"></i>
+                        {{ languageService.currentLanguage() === 'ar' ? 'نبذة عنك' : 'About You' }}
+                      </label>
+                      <textarea id="bio"
+                                formControlName="bio"
+                                class="form-control"
+                                rows="3"
+                                [class.is-invalid]="hasError('bio', 'maxlength')"
+                                [placeholder]="languageService.currentLanguage() === 'ar' ? 'اكتب نبذة قصيرة عن نفسك...' : 'Write a short bio about yourself...'"></textarea>
+                      <div class="invalid-feedback" *ngIf="hasError('bio', 'maxlength')">
+                        {{ getErrorMessage('bio') }}
+                      </div>
+                      <small class="text-muted">
+                        {{ (profileForm.get('bio')?.value?.length || 0) }}/200
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="row mt-4">
+                <div class="col-12">
+                  <div class="d-flex gap-2 flex-wrap">
+                    <button type="submit" 
+                            class="btn btn-success"
+                            [disabled]="profileForm.invalid || isSubmitting">
+                      <i class="fas fa-save me-2" *ngIf="!isSubmitting"></i>
+                      <i class="fas fa-spinner fa-spin me-2" *ngIf="isSubmitting"></i>
+                      {{ isSubmitting ? 
+                         (languageService.currentLanguage() === 'ar' ? 'جاري الحفظ...' : 'Saving...') : 
+                         (languageService.currentLanguage() === 'ar' ? 'حفظ التغييرات' : 'Save Changes') }}
+                    </button>
+                    <button type="button" 
+                            class="btn btn-outline-secondary"
+                            (click)="cancelEditing()"
+                            [disabled]="isSubmitting">
+                      <i class="fas fa-times me-2"></i>
+                      {{ languageService.currentLanguage() === 'ar' ? 'إلغاء' : 'Cancel' }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

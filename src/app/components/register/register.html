@@ -6,7 +6,11 @@
     </div>
 
     <div class="card-content">
-      <form #registerForm="ngForm" (ngSubmit)="onRegister(registerForm)" class="register-form">
+      <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="register-form">
+        <!-- Error message container -->
+        <div *ngIf="registerError" class="error-message">
+          <span class="error-icon">⚠️</span> {{ registerError }}
+        </div>
         
         <div class="form-row">
           <div class="form-group">
@@ -14,12 +18,14 @@
             <input 
               type="text" 
               id="firstName"
-              name="firstName" 
-              [(ngModel)]="user.firstName" 
-              required
+              formControlName="firstName"
+              [class.is-invalid]="hasError('firstName', 'required') || hasError('firstName', 'minlength')"
               class="form-input"
               [placeholder]="languageService.currentLanguage() === 'ar' ? 'أدخل اسمك الأول' : 'Enter your first name'"
             >
+            <div *ngIf="hasError('firstName', 'required') || hasError('firstName', 'minlength')" class="validation-error">
+              {{ getErrorMessage('firstName') }}
+            </div>
           </div>
 
           <div class="form-group">
@@ -27,12 +33,14 @@
             <input 
               type="text" 
               id="lastName"
-              name="lastName" 
-              [(ngModel)]="user.lastName" 
-              required
+              formControlName="lastName"
+              [class.is-invalid]="hasError('lastName', 'required') || hasError('lastName', 'minlength')"
               class="form-input"
               [placeholder]="languageService.currentLanguage() === 'ar' ? 'أدخل اسم العائلة' : 'Enter your last name'"
             >
+            <div *ngIf="hasError('lastName', 'required') || hasError('lastName', 'minlength')" class="validation-error">
+              {{ getErrorMessage('lastName') }}
+            </div>
           </div>
         </div>
 
@@ -41,50 +49,102 @@
           <input 
             type="email" 
             id="email"
-            name="email" 
-            [(ngModel)]="user.email" 
-            required 
-            email
+            formControlName="email"
+            [class.is-invalid]="hasError('email', 'required') || hasError('email', 'email')"
             class="form-input"
             [placeholder]="languageService.currentLanguage() === 'ar' ? 'أدخل بريدك الإلكتروني' : 'Enter your email'"
           >
+          <div *ngIf="hasError('email', 'required') || hasError('email', 'email')" class="validation-error">
+            {{ getErrorMessage('email') }}
+          </div>
         </div>
 
         <div class="form-group">
           <label for="password">{{ languageService.currentLanguage() === 'ar' ? 'كلمة المرور' : 'Password' }}</label>
-          <input 
-            type="password" 
-            id="password"
-            name="password" 
-            [(ngModel)]="user.password" 
-            required 
-            minlength="8"
-            class="form-input"
-            [placeholder]="languageService.currentLanguage() === 'ar' ? 'أدخل كلمة المرور (8 أحرف على الأقل)' : 'Enter password (min 8 characters)'"
-          >
+          <div class="password-input-container">
+            <input 
+              [type]="showPassword ? 'text' : 'password'" 
+              id="password"
+              formControlName="password"
+              [class.is-invalid]="hasError('password', 'required') || hasError('password', 'minlength') || hasError('password', 'invalidPassword')"
+              class="form-input"
+              [placeholder]="languageService.currentLanguage() === 'ar' ? 'أدخل كلمة المرور' : 'Enter your password'"
+            >
+            <button 
+              type="button" 
+              class="toggle-password" 
+              (click)="showPassword = !showPassword"
+              [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+            >
+              <span *ngIf="!showPassword" class="material-icons">visibility</span>
+              <span *ngIf="showPassword" class="material-icons">visibility_off</span>
+            </button>
+          </div>
+          <div *ngIf="hasError('password', 'required') || hasError('password', 'minlength') || hasError('password', 'invalidPassword')" class="validation-error">
+            {{ getErrorMessage('password') }}
+          </div>
+          
+          <div *ngIf="!hasError('password', 'required') && !hasError('password', 'minlength') && !hasError('password', 'invalidPassword') && registerForm.get('password')?.value" class="password-strength">
+            <div class="strength-bar" 
+                 [class.weak]="passwordStrength === 'weak'" 
+                 [class.medium]="passwordStrength === 'medium'" 
+                 [class.strong]="passwordStrength === 'strong'">
+            </div>
+            <span class="strength-text" 
+                  [class.weak]="passwordStrength === 'weak'" 
+                  [class.medium]="passwordStrength === 'medium'" 
+                  [class.strong]="passwordStrength === 'strong'">
+              <ng-container *ngIf="passwordStrength">
+                {{ languageService.currentLanguage() === 'ar' ? 
+                   (passwordStrength === 'weak' ? 'ضعيفة' : passwordStrength === 'medium' ? 'متوسطة' : 'قوية') : 
+                   (passwordStrength | titlecase) }}
+              </ng-container>
+            </span>
+          </div>
         </div>
 
         <div class="form-group">
           <label for="confirmPassword">{{ languageService.currentLanguage() === 'ar' ? 'تأكيد كلمة المرور' : 'Confirm Password' }}</label>
-          <input 
-            type="password" 
-            id="confirmPassword"
-            name="confirmPassword" 
-            [(ngModel)]="user.confirmPassword" 
-            required
-            class="form-input"
-            [placeholder]="languageService.currentLanguage() === 'ar' ? 'أعد إدخال كلمة المرور' : 'Re-enter your password'"
-          >
+          <div class="password-input-container">
+            <input 
+              [type]="showConfirmPassword ? 'text' : 'password'" 
+              id="confirmPassword"
+              formControlName="confirmPassword"
+              [class.is-invalid]="hasError('confirmPassword', 'required') || registerForm.hasError('passwordMismatch')"
+              class="form-input"
+              [placeholder]="languageService.currentLanguage() === 'ar' ? 'أعد إدخال كلمة المرور' : 'Re-enter your password'"
+            >
+            <button 
+              type="button" 
+              class="toggle-password" 
+              (click)="showConfirmPassword = !showConfirmPassword"
+              [attr.aria-label]="showConfirmPassword ? 'Hide password' : 'Show password'"
+            >
+              <span *ngIf="!showConfirmPassword" class="material-icons">visibility</span>
+              <span *ngIf="showConfirmPassword" class="material-icons">visibility_off</span>
+            </button>
+          </div>
+          <div *ngIf="hasError('confirmPassword', 'required') || registerForm.hasError('passwordMismatch')" class="validation-error">
+            {{ registerForm.hasError('passwordMismatch') ? 
+               (languageService.currentLanguage() === 'ar' ? 'كلمات المرور غير متطابقة' : 'Passwords do not match') : 
+               getErrorMessage('confirmPassword') }}
+          </div>
         </div>
 
         <button 
           type="submit" 
-          [disabled]="registerForm.invalid || user.password !== user.confirmPassword" 
+          [disabled]="registerForm.invalid || isSubmitting" 
           class="submit-btn"
-          [class.disabled]="registerForm.invalid || user.password !== user.confirmPassword"
+          [class.disabled]="registerForm.invalid || isSubmitting"
         >
-          <span class="btn-text">{{ translationService.t.register }}</span>
-          <span class="btn-icon">✓</span>
+          <span *ngIf="!isSubmitting" class="btn-text">
+            {{ translationService.t.register }}
+          </span>
+          <span *ngIf="isSubmitting" class="btn-text">
+            {{ languageService.currentLanguage() === 'ar' ? 'جاري إنشاء الحساب...' : 'Creating account...' }}
+          </span>
+          <span *ngIf="!isSubmitting" class="btn-icon">✓</span>
+          <mat-spinner *ngIf="isSubmitting" diameter="20" strokeWidth="3" class="spinner"></mat-spinner>
         </button>
 
         <p class="switch-text">

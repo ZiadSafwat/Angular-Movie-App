@@ -1,13 +1,13 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
   <div class="container-fluid">
     <!-- Brand -->
-    <a class="navbar-brand fw-bold text-warning" >   {{ t('app_Name') }}</a>
+    <a class="navbar-brand fw-bold text-warning" routerLink="/">
+      {{ t('app_Name') }}
+    </a>
 
     <!-- Mobile Toggler -->
     <button class="navbar-toggler" 
             type="button" 
-            data-bs-toggle="collapse" 
-            data-bs-target="#mainNavbar"
             aria-controls="mainNavbar"
             aria-expanded="false"
             aria-label="Toggle navigation"
@@ -70,6 +70,10 @@
              [routerLinkActiveOptions]="{ exact: true }"
              (click)="closeMobileMenu()">
             {{ t('favorites') }}
+            <span *ngIf="wishlistService.wishlistItems().length > 0" 
+                  class="badge bg-warning text-dark ms-1">
+              {{ wishlistService.wishlistItems().length }}
+            </span>
           </a>
         </li>
       </ul>
@@ -87,7 +91,7 @@
                    [placeholder]="t('search_placeholder')"
                    aria-label="Search" />
             <button class="btn btn-outline-warning" type="submit">
-              {{ t('search') }}
+              <i class="fas fa-search"></i> {{ t('search') }}
             </button>
           </div>
         </form>
@@ -112,34 +116,50 @@
             <a routerLink="/login" 
                class="btn btn-outline-light btn-sm"
                (click)="closeMobileMenu()">
-              {{ t('login') }}
+              <i class="fas fa-sign-in-alt"></i> {{ t('login') }}
             </a>
             <a routerLink="/register" 
                class="btn btn-warning btn-sm"
                (click)="closeMobileMenu()">
-              {{ t('register') }}
+              <i class="fas fa-user-plus"></i> {{ t('register') }}
             </a>
           </div>
 
           <!-- User Dropdown -->
-          <div *ngIf="isLoggedIn()" class="dropdown flex-shrink-0">
-            <button class="btn btn-outline-light btn-sm dropdown-toggle" 
+          <div *ngIf="isLoggedIn()" class="dropdown flex-shrink-0 user-dropdown">
+            <button class="btn btn-outline-warning btn-sm dropdown-toggle d-flex align-items-center" 
                     type="button" 
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false">
-              👤 {{ getCurrentUser() }}
+                    (click)="toggleUserDropdown()"
+                    [attr.aria-expanded]="isUserDropdownOpen()">
+              <i class="fas fa-user-circle me-1"></i>
+              <span class="user-name">{{ currentUser() }}</span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end">
+            <ul class="dropdown-menu dropdown-menu-end shadow" [class.show]="isUserDropdownOpen()">
               <li>
-                <a class="dropdown-item" 
-                   routerLink="/account"
-                   (click)="closeMobileMenu()">
+                <a class="dropdown-item d-flex align-items-center" 
+                   routerLink="/profile"
+                   (click)="goToProfile()">
+                  <i class="fas fa-user me-2"></i>
                   {{ t('profile') }}
                 </a>
               </li>
               <li>
-                <button class="dropdown-item text-danger" 
+                <a class="dropdown-item d-flex align-items-center" 
+                   routerLink="/wishlist"
+                   (click)="closeUserDropdown()">
+                  <i class="fas fa-heart me-2"></i>
+                  {{ t('favorites') }}
+                  <span *ngIf="wishlistService.wishlistItems().length > 0" 
+                        class="badge bg-warning text-dark ms-auto">
+                    {{ wishlistService.wishlistItems().length }}
+                  </span>
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <li>
+                <button class="dropdown-item d-flex align-items-center text-danger" 
                         (click)="logout()">
+                  <i class="fas fa-sign-out-alt me-2"></i>
                   {{ t('logout') }}
                 </button>
               </li>

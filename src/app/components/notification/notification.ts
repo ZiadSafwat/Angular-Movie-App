@@ -1,62 +1,25 @@
 // components/notification/notification.component.ts
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NotificationService } from '../../services/notification';
- 
 
+/**
+ * This component is now a thin wrapper around MatSnackBar.
+ * All the notification display logic is handled by the NotificationService.
+ * 
+ * The component is kept for backward compatibility but doesn't need to 
+ * implement any functionality as MatSnackBar handles all the UI and animations.
+ */
 @Component({
   selector: 'app-notification',
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="notifications-container">
-      <div 
-        *ngFor="let notification of notificationService.notifications()"
-        [class]="'notification ' + notification.type"
-        (click)="dismiss(notification.id)"
-      >
-        {{ notification.message }}
-        <button class="close-btn" (click)="dismiss(notification.id)">×</button>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .notifications-container {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 1000;
-    }
-    .notification {
-      padding: 12px 16px;
-      margin-bottom: 8px;
-      border-radius: 4px;
-      color: white;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      min-width: 250px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-    .success { background: #4caf50; }
-    .error { background: #f44336; }
-    .info { background: #2196f3; }
-    .warning { background: #ff9800; }
-    .close-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 18px;
-      cursor: pointer;
-      margin-left: 10px;
-    }
-  `]
+    <!-- This component is intentionally left empty -->
+    <!-- All notifications are handled by MatSnackBar from the NotificationService -->
+    <div></div>
+  `
 })
 export class NotificationComponent {
-  notificationService = inject(NotificationService);
-
-  dismiss(id: number): void {
-    this.notificationService.dismiss(id);
-  }
+  // No implementation needed - this is just a placeholder component
+  // for backward compatibility
 }

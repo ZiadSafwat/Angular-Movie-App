@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit, computed, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { WishlistService } from '../../services/wishlist';
@@ -23,6 +23,22 @@ export class NavbarComponent implements OnInit {
 
   translations: any = {};
   isMobileMenuOpen = signal<boolean>(false);
+  isUserDropdownOpen = signal<boolean>(false);
+  
+  // Use computed to reactively get auth state
+  isLoggedIn = computed(() => this.authService.isAuthenticated());
+  currentUser = computed(() => 
+    this.isLoggedIn() ? (this.authService.getCurrentUser() || 'User') : ''
+  );
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    // Close dropdown if clicked outside
+    const target = event.target as HTMLElement;
+    if (!target.closest('.user-dropdown')) {
+      this.isUserDropdownOpen.set(false);
+    }
+  }
 
   async ngOnInit() {
     // Load translations JSON
@@ -42,7 +58,6 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-
   changeLanguage(event: Event) {
     const lang = (event.target as HTMLSelectElement).value as 'en' | 'ar';
     
@@ -59,6 +74,7 @@ export class NavbarComponent implements OnInit {
       });
     }, 100);
   }
+
   toggleMobileMenu() {
     this.isMobileMenuOpen.update(open => !open);
   }
@@ -67,30 +83,39 @@ export class NavbarComponent implements OnInit {
     this.isMobileMenuOpen.set(false);
   }
 
+  toggleUserDropdown() {
+    this.isUserDropdownOpen.update(open => !open);
+  }
+
+  closeUserDropdown() {
+    this.isUserDropdownOpen.set(false);
+  }
+
   t(key: string): string {
     // Use the current language from LanguageService
     const lang = this.languageService.currentLanguage();
     return this.translations?.[lang]?.[key] ?? key;
   }
 
-  isLoggedIn(): boolean {
-    return this.authService.isLoggedIn();
-  }
-
-  getCurrentUser(): string {
-    return this.authService.getCurrentUser() || 'User';
-  }
-
   onSearch(query: string, event?: Event) {
     if (event) event.preventDefault();
     if (query && query.trim().length > 0) {
       this.router.navigate(['/search', query.trim()]);
-      this.closeMobileMenu(); // Close mobile menu after search
+      this.closeMobileMenu();
+      this.closeUserDropdown();
     }
   }
 
   logout(): void {
     this.authService.logout();
     this.closeMobileMenu();
+    this.closeUserDropdown();
+    this.router.navigate(['/']);
+  }
+
+  goToProfile(): void {
+    this.router.navigate(['/profile']);
+    this.closeMobileMenu();
+    this.closeUserDropdown();
   }
 }

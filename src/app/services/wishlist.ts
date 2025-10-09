@@ -62,7 +62,9 @@ export class WishlistService {
     this.wishlistCount.set(wishlist.length);
     localStorage.setItem(this.WISHLIST_KEY, JSON.stringify(wishlist));
   }
-
+  getWishlist(): Movie[] {
+    return this.wishlistItems();
+  }
   private getWishlistFromStorage(): Movie[] {
     const stored = localStorage.getItem(this.WISHLIST_KEY);
     return stored ? JSON.parse(stored) : [];

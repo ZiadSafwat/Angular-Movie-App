@@ -8,12 +8,16 @@ import { Search } from './components/search/search';
 import { LoginComponent } from './components/login/login';
 import { RegisterComponent } from './components/register/register';
 import { authGuard } from './guards/auth.guard';
+import { ProfileComponent } from './components/profile/profile';
+import { ChangePassword } from './components/change-password/change-password';
+
 
 export const routes: Routes = [
   { path: '', redirectTo: '/movies/now_playing', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, title: 'Login - MovieApp' },
   { path: 'register', component: RegisterComponent, title: 'Register - MovieApp' },
-
+  { path: 'profile', component: ProfileComponent },
+  { path: 'change-password', component: ChangePassword },
   // Protected routes - require authentication
   { path: 'movies/:category', component: Home, title: 'Movies - MovieApp', canActivate: [authGuard] },
   { path: 'wishlist', component: WishlistComponent, title: 'My Wishlist - MovieApp', canActivate: [authGuard] },
