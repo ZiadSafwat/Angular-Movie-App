@@ -9,21 +9,14 @@ import { LoginComponent } from './components/login/login';
 import { RegisterComponent } from './components/register/register';
 import { authGuard } from './guards/auth.guard';
 
-
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, title: 'Login - MovieApp' },
   { path: 'register', component: RegisterComponent, title: 'Register - MovieApp' },
-  
+
   // Protected routes - require authentication
-   { path: 'wishlist', component: WishlistComponent, title: 'My Wishlist - MovieApp', canActivate: [authGuard] },
-
-
-
-  { path: 'movies/:category', component: Home, title: 'Movies - MovieApp' ,canActivate: [authGuard] },
-
-
-  
+  { path: 'movies/:category', component: Home, title: 'Movies - MovieApp', canActivate: [authGuard] },
+  { path: 'wishlist', component: WishlistComponent, title: 'My Wishlist - MovieApp', canActivate: [authGuard] },
   { path: 'genres', component: Genres, title: 'Genres', canActivate: [authGuard] },
   { path: 'genre/:id', component: MoviesByGenres, title: 'Movies by Genre', canActivate: [authGuard] },
   { path: 'movie/:id', component: MovieDetails, title: 'Movie Details - MovieApp', canActivate: [authGuard] },
