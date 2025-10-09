@@ -76,6 +76,21 @@
     min-width: 300px;
   }
 }
+/* Prevent navbar links from wrapping to a new line */
+.navbar-nav {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.navbar-nav .nav-item {
+  margin-right: 0.25rem;
+}
+
+/* Ensure navbar stays aligned horizontally */
+.navbar-collapse {
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
 
 /* RTL Support */
 .rtl .navbar-nav {
