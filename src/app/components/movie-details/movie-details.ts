@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 
 
@@ -18,9 +18,10 @@ import { CommonModule } from '@angular/common';
 export class MovieDetails implements OnInit {
   movie: any;
   recommendations: any[] = [];
+  trailerUrl: SafeResourceUrl | null = null; 
   apiKey = '542dd2bd8b7bec9ff41da1986ae577d1'; 
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
+  constructor(private route: ActivatedRoute, private http: HttpClient, private sanitizer: DomSanitizer ) {}
 
   ngOnInit(): void {
     const movieId = this.route.snapshot.paramMap.get('id');
@@ -33,6 +34,17 @@ export class MovieDetails implements OnInit {
     this.http.get(`https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${this.apiKey}`)
       .subscribe((data: any) => {
         this.recommendations = data.results;
+      });
+    this.http.get(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${this.apiKey}`)
+      .subscribe((data: any) => {
+        const trailer = data.results.find(
+          (v: any) => v.type === 'Trailer' && v.site === 'YouTube'
+        );
+        if (trailer) {
+          const url = `https://www.youtube.com/embed/${trailer.key}`;
+          // 👇 تأمين الرابط باستخدام DomSanitizer
+          this.trailerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+        }
       });
   }
 

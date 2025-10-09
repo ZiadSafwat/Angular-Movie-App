@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GenresService } from '../../services/genres-service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-movies-by-genres',
-  imports: [CommonModule],
+  imports: [CommonModule,FormsModule],
   templateUrl: './movies-by-genres.html',
   styleUrl: './movies-by-genres.css'
 })
@@ -18,7 +19,8 @@ export class MoviesByGenres {
 
   constructor(
     private route: ActivatedRoute,
-    private genresService: GenresService
+    private genresService: GenresService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -34,14 +36,20 @@ export class MoviesByGenres {
   }
 
   loadMovies(page: number) {
-    this.genresService.getMoviesByGenre(this.genreId, page).subscribe((data: any) => {
+    this.genresService.getMoviesByGenre(this.genreId, page,this.selectedSort).subscribe((data: any) => {
       this.movies = data.results;
       this.currentPage = page;
       this.totalPages = data.total_pages; 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
-
+ selectedSort = 'popularity.desc';
+  sortOptions = [
+    { value: 'popularity.desc', label: 'Most Popular' },
+    { value: 'vote_average.desc', label: 'Highest Rated' },
+    { value: 'release_date.desc', label: 'Newest First' }
+  ];
+  
   nextPage() {
     if (this.currentPage < this.totalPages) {
       this.loadMovies(this.currentPage + 1);
@@ -58,5 +66,8 @@ export class MoviesByGenres {
     if (page >= 1 && page <= this.totalPages) {
       this.loadMovies(page);
     }
+  }
+    goToDetails(movieId: number) {
+    this.router.navigate(['/movie', movieId]);
   }
 }

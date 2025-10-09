@@ -1,28 +1,92 @@
 <div *ngIf="movie" class="container my-4">
-  <div class="row">
-    <div class="col-md-4">
-      <img [src]="getImageUrl(movie.poster_path)" [alt]="movie.title" class="img-fluid rounded shadow-sm" />
+  <div class="row align-items-start mb-5">
+    <div class="col-md-4 mb-4 mb-md-0">
+      <img [src]="getImageUrl(movie.poster_path)" 
+      [alt]="movie.title"
+      class="img-fluid rounded shadow-lg border border-light"
+          style="max-height: 500px; object-fit: cover;"
+       />
     </div>
 
     <div class="col-md-8">
-      <h2 class="fw-bold">{{ movie.title }}</h2>
-      <p class="text-muted fst-italic">{{ movie.tagline }}</p>
-      <p>{{ movie.overview }}</p>
+      <h1 class="display-4 fw-bold mb-1 text-uppercase text-dark">
+          {{ movie.title }}
+        </h1>
+      <p class="lead fst-italic mb-4 text-warning">{{ movie.tagline }}</p>
+      <div class="d-flex align-items-center mb-4">
+          <span class="badge  text-warning fs-5 me-3 p-2 ">
+            ⭐ {{ movie.vote_average }}
+          </span>
+          <span class="text-secondary me-3">({{ movie.vote_count }} votes)</span>
+          <span class="text-secondary me-3">|</span>
+          <span class="text-secondary me-3">
+            {{ movie.runtime }} min
+          </span>
+          <span class="text-secondary">
+            {{ movie.release_date | slice:0:4 }}
+          </span>
+        </div>
 
-      <ul class="list-unstyled">
-        <li><strong>Release Date:</strong> {{ movie.release_date }}</li>
-        <li><strong>Runtime:</strong> {{ movie.runtime }} minutes</li>
-        <li><strong>Language:</strong> {{ movie.original_language | uppercase }}</li>
-        <li><strong>Rating:</strong> ⭐ {{ movie.vote_average }} ({{ movie.vote_count }} votes)</li>
-      </ul>
+        <h4 class="fw-semibold mt-4 mb-2 text-warning">Overview</h4>
+        <p class="fs-6 mb-4 text-dark">{{ movie.overview }}</p>
+
+        <div class="row">
+          <div class="col-sm-6">
+            <ul class="list-unstyled small">
+              <li class="mb-1">
+                <strong class="text-dark">Release Date: </strong>
+                <span class="text-secondary">{{ movie.release_date }}</span>
+              </li>
+              <li class="mb-1">
+                <strong class="text-dark">Runtime: </strong>
+                <span class="text-secondary">{{ movie.runtime }} minutes</span>
+              </li>
+            </ul>
+          </div>
+          <div class="col-sm-6">
+            <ul class="list-unstyled small">
+              <li class="mb-1">
+                <strong class="text-dark">Language:   </strong>
+                <span class="text-secondary">{{
+                  movie.original_language | uppercase
+                }}</span>
+              </li>
+              <li class="mb-1">
+                <strong class="text-dark">Rating:  </strong>
+                <span class="text-secondary"
+                  >{{ movie.vote_average }} / 10</span
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  <!-- Official Trailer Section -->
+  <div *ngIf="trailerUrl" class="mt-5">
+    <h3  class="fw-bold mb-3 text-warning border-bottom border-warning pb-2"
+ style="color: #ffd700">Official Trailer</h3>
+    <div class="ratio ratio-16x9 shadow-sm rounded">
+     <iframe
+  *ngIf="trailerUrl"
+  [src]="trailerUrl"
+  title="Movie Trailer"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+
+  allowfullscreen>
+</iframe>
+
     </div>
   </div>
 
-  <!-- Recommended Movies Section -->
+  <!--  Recommended Movies Section -->
   <h3 class="fw-bold mt-5 mb-3" style="color: #ffd700">Recommended Movies</h3>
   <div class="row g-4">
     <div *ngFor="let rec of recommendations" class="col-6 col-sm-4 col-md-3 col-lg-2">
-      <div class="card bg-light border h-100 movie-card shadow-sm"  style="cursor: pointer;">
+      <div class="card bg-light border h-100 movie-card shadow-sm" style="cursor: pointer;">
         <img [src]="getImageUrl(rec.poster_path)" class="card-img-top" [alt]="rec.title + ' Poster'">
 
         <div class="card-body d-flex flex-column p-2">

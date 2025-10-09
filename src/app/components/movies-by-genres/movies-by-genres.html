@@ -1,5 +1,15 @@
-<div class="container py-4 text-light">
+<div class="container py-4 text-light  ">
   <h3 class="fw-bold mb-4" style="color: #ffd700">{{ genreName }}</h3>
+<div class="d-flex align-items-center mb-4 gap-2">
+  <label class="fw-semibold mb-0" style="color: #ffd700">Sort By:</label>
+  <select class="form-select form-select-sm w-auto"
+          [(ngModel)]="selectedSort"
+          (change)="loadMovies(currentPage)">
+    <option *ngFor="let option of sortOptions" [value]="option.value">
+      {{ option.label }}
+    </option>
+  </select>
+</div>
 
   <div class="row g-4">
     @for (movie of movies; track movie.id) {
@@ -9,9 +19,12 @@
           [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
           class="card-img-top"
           alt="{{ movie.title }}"
+          (click)="goToDetails(movie.id)"
         />
         <div class="card-body p-2">
           <h6 class="card-title text-truncate">{{ movie.title }}</h6>
+
+
 
           <p class="card-text mb-1 small text-muted">Release: {{ movie.release_date }}</p>
           <p class="small text-muted mb-0">⭐ {{ movie.vote_average }}</p>

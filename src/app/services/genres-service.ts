@@ -18,11 +18,13 @@ export class GenresService {
   }
 
   // Get movies by genre id
-  getMoviesByGenre(genreId: number, page: number = 1): Observable<any> {
+  getMoviesByGenre(genreId: number, page: number = 1,sortBy: string = 'popularity.desc'): Observable<any> {
     const params = new HttpParams()
       .set('api_key', this.apiKey)
       .set('with_genres', genreId.toString())
-      .set('page', page.toString());
+      .set('page', page.toString())
+      .set('sort_by', sortBy);
     return this.http.get(`${this.baseUrl}/discover/movie`, { params });
   }
+
 }
