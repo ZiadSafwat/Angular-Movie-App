@@ -10,6 +10,7 @@ import { RegisterComponent } from './components/register/register';
 import { authGuard } from './guards/auth.guard';
 import { ProfileComponent } from './components/profile/profile';
 import { ChangePassword } from './components/change-password/change-password';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 
 export const routes: Routes = [
@@ -27,5 +28,6 @@ export const routes: Routes = [
   { path: 'search/:query', component: Search, title: 'Search - MovieApp', canActivate: [authGuard] },
 
   // { path: 'account', component: AccountDetailsComponent, title: 'Account - MovieApp', canActivate: [authGuard] },
-  // { path: '**', component: NotFoundComponent, title: 'Page Not Found - MovieApp' }
+  { path: '404', component: NotFoundComponent, title: 'Page Not Found - MovieApp' },
+  { path: '**', redirectTo: '/404' }
 ];
