@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { BrowserModule, DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
+import { LoadingService } from 'src/app/services/loading-service';
 
 
 @Component({
@@ -21,19 +22,27 @@ export class MovieDetails implements OnInit {
   trailerUrl: SafeResourceUrl | null = null; 
   apiKey = '542dd2bd8b7bec9ff41da1986ae577d1'; 
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private sanitizer: DomSanitizer ) {}
+  constructor(
+    private route: ActivatedRoute,
+     private http: HttpClient, 
+     private sanitizer: DomSanitizer,
+     private loadingService: LoadingService   ) {}
 
   ngOnInit(): void {
+      this.loadingService.show();
     const movieId = this.route.snapshot.paramMap.get('id');
 
     this.http.get(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${this.apiKey}`)
       .subscribe((data: any) => {
         this.movie = data;
+
       });
 
     this.http.get(`https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=${this.apiKey}`)
       .subscribe((data: any) => {
         this.recommendations = data.results;
+
+        
       });
     this.http.get(`https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${this.apiKey}`)
       .subscribe((data: any) => {
@@ -42,16 +51,14 @@ export class MovieDetails implements OnInit {
         );
         if (trailer) {
           const url = `https://www.youtube.com/embed/${trailer.key}`;
-          // 👇 تأمين الرابط باستخدام DomSanitizer
           this.trailerUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
         }
+         this.loadingService.hide();
+    
       });
-  }
 
+  }
   getImageUrl(path: string) {
     return path ? `https://image.tmdb.org/t/p/w500${path}` : 'assets/placeholder.jpg';
   }
-
-
-  
 }

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { WishlistService } from '../../services/wishlist';
 import { LanguageService } from 'src/app/services/language';
+import { LoadingService } from 'src/app/services/loading-service';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +23,9 @@ export class Home {
   translations: any = {};
   constructor(    
     public MovieService: MovieList,
-    private router: Router,    private route: ActivatedRoute,
+    private router: Router,   
+     private route: ActivatedRoute,
+     private loadingService: LoadingService 
   
   ) {}
   
@@ -49,11 +52,13 @@ export class Home {
     }
   }
   loadMovies(page: number) {
+     this.loadingService.show();
     this.MovieService.getMovies(this.category, page).subscribe((data) => {
       this.movies = data.results;
       this.totalPages = data.total_pages;
       this.currentPage = data.page;
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      this.loadingService.hide();
     });
   }
 

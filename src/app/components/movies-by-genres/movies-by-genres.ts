@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GenresService } from '../../services/genres-service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { LoadingService } from 'src/app/services/loading-service';
 
 @Component({
   selector: 'app-movies-by-genres',
@@ -20,7 +21,8 @@ export class MoviesByGenres {
   constructor(
     private route: ActivatedRoute,
     private genresService: GenresService,
-    private router: Router
+    private router: Router,
+    private loadingService: LoadingService 
   ) {}
 
   ngOnInit(): void {
@@ -36,11 +38,13 @@ export class MoviesByGenres {
   }
 
   loadMovies(page: number) {
+    this.loadingService.show();
     this.genresService.getMoviesByGenre(this.genreId, page,this.selectedSort).subscribe((data: any) => {
       this.movies = data.results;
       this.currentPage = page;
       this.totalPages = data.total_pages; 
       window.scrollTo({ top: 0, behavior: 'smooth' });
+      this.loadingService.hide();
     });
   }
  selectedSort = 'popularity.desc';

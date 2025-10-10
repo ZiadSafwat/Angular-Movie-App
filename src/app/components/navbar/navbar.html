@@ -79,12 +79,12 @@
       </ul>
 
       <!-- Right Controls -->
-      <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2 w-100 w-lg-auto">
+      <div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center   w-lg-auto">
         
         <!-- Search Form -->
         <form class="d-flex align-items-center search-form w-100 w-lg-auto mb-2 mb-lg-0" 
               (submit)="onSearch(searchInput.value, $event)">
-          <div class="input-group input-group-sm">
+          <div class="input-group input-group-sm " style="width: 280px;">
             <input #searchInput
                    class="form-control"
                    type="search"
@@ -97,7 +97,7 @@
         </form>
 
         <!-- Controls Row -->
-        <div class="d-flex flex-wrap align-items-center gap-2 w-100 w-lg-auto">
+        <div class="d-flex align-items-center gap-2 flex-nowrap w-100 w-lg-auto justify-content-lg-end">
           
           <!-- Dark Mode Toggle -->
           <app-dark-mode-toggle class="flex-shrink-0"></app-dark-mode-toggle>

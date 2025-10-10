@@ -34,6 +34,9 @@
 .navbar-brand:hover {
   transform: scale(1.05);
 }
+.navbar .d-flex.gap-2 {
+  gap: 0.2rem !important; 
+}
 
 /* User Dropdown Styles */
 .user-name {
@@ -71,6 +74,7 @@
 .search-form input[type="search"] {
   transition: all 0.2s ease;
   border-radius: 0.375rem;
+  
 }
 
 .search-form input[type="search"]:focus {
@@ -244,6 +248,7 @@
   right: 0;
   left: auto;
   z-index: 1000;
+  
 }
 
 .dropdown-menu.show {
@@ -285,4 +290,18 @@
 
 .dropdown-menu {
   z-index: 1040;
+}
+/* 🔹 تقليل المسافة بين عناصر الـ navbar الرئيسية */
+.navbar-nav .nav-item {
+  margin-right: 0.15rem !important; /* المسافة الأفقية */
+}
+
+.navbar-nav .nav-link {
+  padding: 0.4rem 0.6rem !important; /* الحشو الداخلي لكل زر */
+}
+
+/* 🔹 دعم اللغة العربية (RTL) */
+html[dir="rtl"] .navbar-nav .nav-item {
+  margin-left: 0.15rem !important;
+  margin-right: 0 !important;
 }
